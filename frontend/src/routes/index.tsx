@@ -4,6 +4,7 @@ import OrdemServico from '../pages/features/OrdemServico';
 import Indicadores from '../pages/features/Indicadores';
 import Listagem from '../pages/features/OrdemServico/Listagem';
 import OsDetalhe from '../pages/features/OrdemServico/Detalhar';
+import AcompanhamentoOS from '../pages/features/OrdemServico/Acompanhamento';
 
 const RotasInternas = () => {
   return (
@@ -15,6 +16,7 @@ const RotasInternas = () => {
         <Route path='/os/cadastrar' element={<OrdemServico />} />
         <Route path='/os/detalhar/:id' element={<OsDetalhe />} />
         <Route path='/os/editar/:id' element={<OrdemServico />} />
+        <Route path="/os/acompanhamento" element={<AcompanhamentoOS />} />
       </Routes>
     </BrowserRouter>
   );

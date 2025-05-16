@@ -1,10 +1,14 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import Card from '../../../../components/Card';
 import { type OptionProps } from '../../../../components/Select';
 import Textarea from '../../../../components/Textarea';
 import Itens, { type Item } from './Itens';
 import Cronograma, { type DadosCronogramaType } from './Cronograma';
 import Identificacao, { type IdentificacaoData } from './Identificacao';
+import Select from '../../../../components/Select';
+import { BrButton } from '@govbr-ds/react-components';
+import FormGroup from '../../../../components/FormGroup';
+import type { OrdemServico, StatusOrdemServico } from '../Listagem';
 
 const OPTIONS: OptionProps[] = [
   {
@@ -30,65 +34,145 @@ const OPTIONS: OptionProps[] = [
   },
 ];
 
+const STATUS_OPTIONS: StatusOrdemServico[] = [
+  'Cancelada',
+  'Não Iniciada',
+  'Em Análise',
+  'Em Execução',
+  'Para Aprovação',
+  'Verificação',
+  'Pendente',
+  'Conclusão',
+  'Encerrada',
+];
+
 interface PropsCadastrar {
-  onSubmit?: (dados: {
-    identificacao: IdentificacaoData;
-    itens: Item[];
-    cronograma: DadosCronogramaType;
-    instrucoes?: string;
-  }) => void;
+  onSubmit?: (dados: OrdemServico) => void;
+  osEditar?: OrdemServico;
 }
 
-const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit }) => {
-  const [itens, setItens] = useState<Item[]>([]);
-  const [cronograma, setCronograma] = useState<DadosCronogramaType>({
-    data_inicio: '',
-    data_fim: '',
-    tabela: [],
-  });
-  const [identificacao, setIdentificacao] = useState<IdentificacaoData>({
-    numeroOS: '',
-    dataEmissao: '',
-    contratoNota: '',
-    objetoContrato: '',
-    contratada: 'BPMX-SERVICE LTDA',
-    cnpj: '13.797.698/0001-37',
-    preposto: 'BERNARDO PAULO MATIAS SCHUAN',
-    inicioVigencia: '',
-    fimVigencia: '',
-    unidade: '',
-    solicitante: '',
-    email: '',
-  });
-  const [instrucoes, setInstrucoes] = useState('');
+const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
+  const [itens, setItens] = useState<Item[]>(osEditar?.itens || []);
+  const [cronograma, setCronograma] = useState<DadosCronogramaType>(
+    osEditar?.cronograma || { data_inicio: '', data_fim: '', tabela: [] }
+  );
+  const [gravidade, setGravidade] = useState<string>();
+  const [urgencia, setUrgencia] = useState<string>();
+  const [tendencia, setTendencia] = useState<string>();
+
+  const [identificacao, setIdentificacao] = useState<IdentificacaoData>(
+    osEditar?.identificacao || {
+      numeroOS: '',
+      dataEmissao: '',
+      contratoNota: '',
+      objetoContrato: '',
+      contratada: 'BPMX-SERVICE LTDA',
+      cnpj: '13.797.698/0001-37',
+      preposto: 'BERNARDO PAULO MATIAS SCHUAN',
+      inicioVigencia: '',
+      fimVigencia: '',
+      unidade: '',
+      solicitante: '',
+      email: '',
+    }
+  );
+  const [instrucoes, setInstrucoes] = useState(osEditar?.instrucoes || '');
+  const [status, setStatus] = useState<StatusOrdemServico>(
+    osEditar?.status ?? 'Não Iniciada'
+  );
+
+  useEffect(() => {
+    if (osEditar) {
+      setItens(osEditar.itens);
+      setCronograma(osEditar.cronograma);
+      setIdentificacao(osEditar.identificacao);
+      setInstrucoes(osEditar.instrucoes || '');
+      setStatus(osEditar.status);
+    }
+  }, [osEditar]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (onSubmit) {
-      onSubmit({ identificacao, itens, cronograma, instrucoes });
+      const g = parseInt(gravidade ?? '0'),
+        u = parseInt(urgencia ?? '0'),
+        t = parseInt(tendencia ?? '0');
+      const gutScore = g * u * t;
+      onSubmit({
+        identificacao,
+        itens,
+        cronograma,
+        instrucoes,
+        status,
+        gravidade: g,
+        urgencia: u,
+        tendencia: t,
+        gutScore,
+      });
     }
   };
 
   return (
-    <Card title='Cadastrar nova OS' subtitle='Informe os campos necessários'>
+    <Card
+      title={osEditar ? 'Editar Ordem de Serviço' : 'Cadastrar nova OS'}
+      subtitle='Informe os campos necessários'>
       <form id='form-cadastrar' onSubmit={handleSubmit}>
         <div className='h4'>Identificação</div>
         <Identificacao
           options={OPTIONS}
           identificacao={identificacao}
-          onChange={(i) => setIdentificacao(i)}
+          onChange={setIdentificacao}
+        />
+        <div className='h4'>Status da OS</div>
+        <Select
+          label='Status'
+          options={STATUS_OPTIONS}
+          value={status}
+          onChange={(v) => setStatus(v as StatusOrdemServico)}
         />
         <div className='h4'>
           Especificações dos bens/serviços e volumes estimados
         </div>
-        <Itens itens={itens} onChange={(i) => setItens(i)} />
+        <Itens itens={itens} onChange={setItens} />
         <div className='h4'>Instruções/Especificações complementares</div>
         <Textarea
           label='Instruções/Especificações complementares'
           value={instrucoes}
           onChange={(e) => setInstrucoes(e.target.value)}
         />
-        <Cronograma onChange={(c) => setCronograma(c)} dados={cronograma} />
+        <Cronograma dados={cronograma} onChange={setCronograma} />
+        <div className='h4'>Prioridade - Matriz GUT</div>
+        <FormGroup>
+          <Select
+            label='Gravidade (1-5)'
+            options={['1', '2', '3', '4', '5']}
+            value={gravidade}
+            onChange={(val) => setGravidade(val)}
+          />
+          <Select
+            label='Urgência (1-5)'
+            options={['1', '2', '3', '4', '5']}
+            value={urgencia}
+            onChange={(val) => setUrgencia(val)}
+          />
+          <Select
+            label='Tendência (1-5)'
+            options={['1', '2', '3', '4', '5']}
+            value={tendencia}
+            onChange={(val) => setTendencia(val)}
+          />
+        </FormGroup>
+        <br />
+        <BrButton
+          secondary={true}
+          type='button'
+          onClick={() => (window.location.href = '/os')}>
+          Voltar
+        </BrButton>
+        &nbsp;&nbsp;&nbsp;
+        <BrButton primary={true} type='submit'>
+          {osEditar ? 'Salvar Alterações' : 'Cadastrar OS'}
+        </BrButton>
       </form>
     </Card>
   );

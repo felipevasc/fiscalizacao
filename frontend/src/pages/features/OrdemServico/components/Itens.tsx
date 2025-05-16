@@ -9,6 +9,7 @@ import {
   TableCell,
   TableFooter,
 } from '@mui/material';
+import { BrButton } from '@govbr-ds/react-components';
 
 export interface Item {
   item: string;
@@ -84,7 +85,9 @@ const Itens: React.FC<ItensProps> = ({ itens, onChange }) => {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}>Adicionar item</button>
+      <BrButton secondary={true} type='button' onClick={() => setShowModal(true)}>
+        Adicionar item
+      </BrButton>
       <Modal
         isOpen={showModal}
         title='Adicionar item'

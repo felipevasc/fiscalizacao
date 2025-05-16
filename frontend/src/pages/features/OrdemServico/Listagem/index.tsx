@@ -6,18 +6,21 @@ import { Paper, Box, Typography, Grid } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 
-import Modal from '../../../../components/Modal';
-import Cadastrar from '../components/Cadastrar';
+export type StatusOrdemServico =
+  | 'Não Iniciada'
+  | 'Em Análise'
+  | 'Em Execução'
+  | 'Para Aprovação'
+  | 'Verificação'
+  | 'Pendente'
+  | 'Conclusão'
+  | 'Encerrada'
+  | 'Cancelada';
+
 import type { IdentificacaoData } from '../components/Identificacao';
 import type { Item } from '../components/Itens';
 import type { DadosCronogramaType } from '../components/Cronograma';
-
-export type StatusOrdemServico =
-  | 'Nova'
-  | 'Em Andamento'
-  | 'Pendente'
-  | 'Concluída'
-  | 'Cancelada';
+import { corPorPrioridade } from '../functions';
 
 export interface OrdemServico {
   id?: string;
@@ -26,13 +29,16 @@ export interface OrdemServico {
   cronograma: DadosCronogramaType;
   instrucoes?: string;
   status: StatusOrdemServico;
+  gravidade: number;
+  urgencia: number;
+  tendencia: number;
+  gutScore: number;
 }
 
 const CHAVE_STORAGE = 'sistema_os';
 
 const Listagem = () => {
   const [listaOS, setListaOS] = useState<OrdemServico[]>([]);
-  const [mostrarCadastro, setMostrarCadastro] = useState(false);
   const navegar = useNavigate();
 
   useEffect(() => {
@@ -42,22 +48,6 @@ const Listagem = () => {
     }
   }, []);
 
-  const salvarNoStorage = (novaLista: OrdemServico[]) => {
-    localStorage.setItem(CHAVE_STORAGE, JSON.stringify(novaLista));
-    setListaOS(novaLista);
-  };
-
-  const salvarNovaOS = (dadosOS: Omit<OrdemServico, 'id' | 'status'>) => {
-    const osComIdStatus: OrdemServico = {
-      ...dadosOS,
-      id: Date.now().toString(),
-      status: 'Nova',
-    };
-    const novaLista = [...listaOS, osComIdStatus];
-    salvarNoStorage(novaLista);
-    setMostrarCadastro(false);
-  };
-
   const detalharOS = (id: string | undefined) => {
     if (!id) return;
     navegar(`/os/detalhar/${id}`);
@@ -65,7 +55,7 @@ const Listagem = () => {
 
   const editarOS = (id: string | undefined) => {
     if (!id) return;
-    navegar(`/editar/${id}`);
+    navegar(`/os/editar/${id}`);
   };
 
   const estiloCard = {
@@ -119,7 +109,9 @@ const Listagem = () => {
           sx={{ fontWeight: 600, color: '#1F4C73' }}>
           Ordens de Serviço
         </Typography>
-        <BrButton primary={true} onClick={() => setMostrarCadastro(true)}>
+        <BrButton
+          primary={true}
+          onClick={() => (window.location.href = '/os/cadastrar')}>
           Cadastrar Nova OS
         </BrButton>
       </Box>
@@ -145,14 +137,16 @@ const Listagem = () => {
             sx={{ color: '#555555', marginBottom: 3 }}>
             Para começar, cadastre uma nova ordem de serviço.
           </Typography>
-          <BrButton primary={true} onClick={() => setMostrarCadastro(true)}>
+          <BrButton
+            primary={true}
+            onClick={() => (window.location.href = '/os/cadastrar')}>
             Cadastrar Primeira OS
           </BrButton>
         </Paper>
       ) : (
         <Grid container spacing={3}>
           {listaOS.map((os) => (
-            <Grid key={os.id} item xs={12} sm={6} md={4}>
+            <Grid key={os.id}>
               <BrCard style={estiloCard}>
                 <Box style={estiloCabecalho}>
                   <Typography
@@ -201,7 +195,40 @@ const Listagem = () => {
                       sx={{ marginRight: 1, fontWeight: 500, color: '#333' }}>
                       Status:
                     </Typography>
-                    <BrTag color='highlight'>{os.status}</BrTag>
+                    <BrTag type='status' color='danger' />
+                    {os.status}
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      mt: 1,
+                      mb: 1,
+                    }}>
+                    <Typography
+                      variant='body2'
+                      sx={{ marginRight: 1, fontWeight: 500, color: '#333' }}>
+                      Prioridade:
+                    </Typography>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        height: '8px',
+                        backgroundColor: '#E9ECEF',
+                        borderRadius: '4px',
+                        position: 'relative',
+                      }}>
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          height: '100%',
+                          width: `${(os.gutScore / 125) * 100}%`,
+                          minWidth: os.gutScore > 0 ? '2%' : '0',
+                          backgroundColor: corPorPrioridade(os.gutScore),
+                          borderRadius: '4px',
+                        }}
+                      />
+                    </Box>
                   </Box>
 
                   {os.itens && os.itens.length > 0 && (
@@ -239,30 +266,6 @@ const Listagem = () => {
           ))}
         </Grid>
       )}
-
-      <Modal
-        isOpen={mostrarCadastro}
-        title='Cadastrar Nova Ordem de Serviço'
-        primaryAction={{
-          label: 'Salvar Ordem de Serviço',
-          action: () =>
-            document
-              .getElementById('form-cadastrar')
-              ?.dispatchEvent(
-                new Event('submit', { cancelable: true, bubbles: true })
-              ),
-        }}
-        secondaryAction={{
-          label: 'Cancelar',
-          action: () => setMostrarCadastro(false),
-        }}
-        onClose={() => setMostrarCadastro(false)}>
-        <Cadastrar
-          onSubmit={(dados) => {
-            salvarNovaOS(dados);
-          }}
-        />
-      </Modal>
     </Box>
   );
 };
