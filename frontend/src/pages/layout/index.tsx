@@ -8,6 +8,7 @@ const Layout = () => {
     <StyledContent>
       <Cabecalho />
       <Conteudo />
+      <Rodape />
     </StyledContent>
   );
 };

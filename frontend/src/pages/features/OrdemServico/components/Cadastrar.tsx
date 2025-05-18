@@ -2,13 +2,23 @@ import { useState, useEffect, type FormEvent } from 'react';
 import Card from '../../../../components/Card';
 import { type OptionProps } from '../../../../components/Select';
 import Textarea from '../../../../components/Textarea';
-import Itens, { type Item } from './Itens';
-import Cronograma, { type DadosCronogramaType } from './Cronograma';
-import Identificacao, { type IdentificacaoData } from './Identificacao';
+import Itens from './Itens';
 import Select from '../../../../components/Select';
 import { BrButton } from '@govbr-ds/react-components';
-import FormGroup from '../../../../components/FormGroup';
-import type { OrdemServico, StatusOrdemServico } from '../Listagem';
+
+import { calcularUdpPrazo } from '../functions';
+import type { StatusOrdemServico } from '../types/StatusOrdemServico';
+import type { OrdemServico } from '../types/OrdemServico';
+import type { Item } from '../types/Item';
+import type { DadosCronogramaType } from '../types/DadosCronogramaType';
+import type { TipoOrdemServico } from '../types/TipoOrdemServico';
+import type { ComplexidadeOrdemServico } from '../types/ComplexidadeOrdemServico';
+import type { IdentificacaoData } from '../types/IdentificacaoData';
+import Identificacao from './Identificacao';
+import Cronograma from './Cronograma';
+import MatrizGUT from './MatrizGUT';
+import Dimensionamento from './Dimensionamento';
+import Wizard from '../../../../components/Wizard';
 
 const OPTIONS: OptionProps[] = [
   {
@@ -59,6 +69,11 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
   const [gravidade, setGravidade] = useState<string>();
   const [urgencia, setUrgencia] = useState<string>();
   const [tendencia, setTendencia] = useState<string>();
+  const [tipo, setTipo] = useState<TipoOrdemServico>(osEditar?.tipo || '');
+  const [complexidade, setComplexidade] = useState<ComplexidadeOrdemServico>(
+    osEditar?.complexidade || ''
+  );
+  const [passoAtivo, setPassoAtivo] = useState<number>(1);
 
   const [identificacao, setIdentificacao] = useState<IdentificacaoData>(
     osEditar?.identificacao || {
@@ -91,8 +106,12 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
     }
   }, [osEditar]);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    const { udp, prazo } = calcularUdpPrazo(
+      tipo as TipoOrdemServico,
+      complexidade as ComplexidadeOrdemServico
+    );
+
     if (onSubmit) {
       const g = parseInt(gravidade ?? '0'),
         u = parseInt(urgencia ?? '0'),
@@ -108,6 +127,10 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
         urgencia: u,
         tendencia: t,
         gutScore,
+        tipo,
+        complexidade,
+        udp,
+        prazoDiasUteis: prazo,
       });
     }
   };
@@ -116,64 +139,79 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
     <Card
       title={osEditar ? 'Editar Ordem de Serviço' : 'Cadastrar nova OS'}
       subtitle='Informe os campos necessários'>
-      <form id='form-cadastrar' onSubmit={handleSubmit}>
-        <div className='h4'>Identificação</div>
-        <Identificacao
-          options={OPTIONS}
-          identificacao={identificacao}
-          onChange={setIdentificacao}
-        />
-        <div className='h4'>Status da OS</div>
-        <Select
-          label='Status'
-          options={STATUS_OPTIONS}
-          value={status}
-          onChange={(v) => setStatus(v as StatusOrdemServico)}
-        />
-        <div className='h4'>
-          Especificações dos bens/serviços e volumes estimados
-        </div>
-        <Itens itens={itens} onChange={setItens} />
-        <div className='h4'>Instruções/Especificações complementares</div>
-        <Textarea
-          label='Instruções/Especificações complementares'
-          value={instrucoes}
-          onChange={(e) => setInstrucoes(e.target.value)}
-        />
-        <Cronograma dados={cronograma} onChange={setCronograma} />
-        <div className='h4'>Prioridade - Matriz GUT</div>
-        <FormGroup>
-          <Select
-            label='Gravidade (1-5)'
-            options={['1', '2', '3', '4', '5']}
-            value={gravidade}
-            onChange={(val) => setGravidade(val)}
-          />
-          <Select
-            label='Urgência (1-5)'
-            options={['1', '2', '3', '4', '5']}
-            value={urgencia}
-            onChange={(val) => setUrgencia(val)}
-          />
-          <Select
-            label='Tendência (1-5)'
-            options={['1', '2', '3', '4', '5']}
-            value={tendencia}
-            onChange={(val) => setTendencia(val)}
-          />
-        </FormGroup>
-        <br />
-        <BrButton
-          secondary={true}
-          type='button'
-          onClick={() => (window.location.href = '/os')}>
-          Voltar
-        </BrButton>
-        &nbsp;&nbsp;&nbsp;
-        <BrButton primary={true} type='submit'>
-          {osEditar ? 'Salvar Alterações' : 'Cadastrar OS'}
-        </BrButton>
-      </form>
+      <Wizard
+        passos={[
+          {
+            titulo: 'Identificação',
+            conteudo: (
+              <Identificacao
+                options={OPTIONS}
+                identificacao={identificacao}
+                onChange={setIdentificacao}
+              />
+            ),
+          },
+          {
+            titulo: 'Status da OS',
+            conteudo: (
+              <Select
+                label='Status'
+                options={STATUS_OPTIONS}
+                value={status}
+                onChange={(v) => setStatus(v as StatusOrdemServico)}
+              />
+            ),
+          },
+          {
+            titulo: 'Especificações',
+            conteudo: (
+              <>
+                <Itens itens={itens} onChange={setItens} />
+                <hr />
+                <Textarea
+                  label='Instruções/Especificações complementares'
+                  value={instrucoes}
+                  onChange={(e) => setInstrucoes(e.target.value)}
+                />
+              </>
+            ),
+          },
+          {
+            titulo: 'Cronograma',
+            conteudo: (
+              <Cronograma dados={cronograma} onChange={setCronograma} />
+            ),
+          },
+          {
+            titulo: 'Dimensionamento',
+            conteudo: (
+              <Dimensionamento
+                setComplexidade={setComplexidade}
+                setTipo={setTipo}
+                complexidade={complexidade}
+                tipo={tipo}
+              />
+            ),
+          },
+          {
+            titulo: 'Priorização',
+            conteudo: (
+              <MatrizGUT
+                gravidade={gravidade}
+                setGravidade={setGravidade}
+                setTendencia={setTendencia}
+                tendencia={tendencia}
+                setUrgencia={setUrgencia}
+                urgencia={urgencia}
+              />
+            ),
+          },
+        ]}
+        ativo={passoAtivo}
+        alterar={(i) => setPassoAtivo(i)}
+        cancelar={() => (window.location.href = '/os')}
+        concluir={() => handleSubmit()}
+      />
     </Card>
   );
 };

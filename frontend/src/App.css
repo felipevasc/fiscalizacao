@@ -26,3 +26,7 @@ h4 {
 .br-modal {
   min-width: 50%;
 }
+
+.br-footer .container-lg, .br-footer .br-divider {
+  display: none;
+}

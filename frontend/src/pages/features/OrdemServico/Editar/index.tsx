@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cadastrar from '../components/Cadastrar';
-import type { IdentificacaoData } from '../components/Identificacao';
-import type { Item } from '../components/Itens';
-import type { DadosCronogramaType } from '../components/Cronograma';
-import type { OrdemServico } from '../Listagem';
+import type { OrdemServico } from '../types/OrdemServico';
+import type { IdentificacaoData } from '../types/IdentificacaoData';
+import type { Item } from '../types/Item';
+import type { DadosCronogramaType } from '../types/DadosCronogramaType';
 
 const STORAGE_KEY = 'sistema_os';
 
@@ -68,15 +68,7 @@ const OsEditar = () => {
   return (
     <div>
       <h2>Editar OS Nº {os?.identificacao.numeroOS || os?.id}</h2>
-      {os && (
-        <Cadastrar
-          identificacao={os.identificacao}
-          itens={os.itens}
-          cronograma={os.cronograma}
-          instrucoes={os.instrucoes}
-          onSubmit={handleSalvar}
-        />
-      )}
+      {os && <Cadastrar osEditar={os} onSubmit={handleSalvar} />}
     </div>
   );
 };

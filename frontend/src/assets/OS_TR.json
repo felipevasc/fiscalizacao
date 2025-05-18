@@ -1,0 +1,1182 @@
+[
+  {
+    "id": "1",
+    "identificacao": {
+      "numeroOS": "OS-1",
+      "dataEmissao": "18/03/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "18/03/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "users",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 1,
+        "descricao": "Item 1 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 20,
+        "valorTotal": 2000
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "18/03/2024",
+      "data_fim": "30/04/2024",
+      "tabela": [
+        {
+          "item": 1,
+          "tarefaEntrega": "Disponibilização da suíte BPMS em nuvem",
+          "inicio": "18/03/2024",
+          "fim": "10/04/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Configuração de licenças e acesso",
+          "inicio": "11/04/2024",
+          "fim": "20/04/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Suporte técnico inicial e relatório",
+          "inicio": "21/04/2024",
+          "fim": "30/04/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 2,
+    "urgencia": 3,
+    "tendencia": 4,
+    "gutScore": 24,
+    "tipo": "Desenho",
+    "complexidade": "",
+    "udp": 20
+  },
+  {
+    "id": "2",
+    "identificacao": {
+      "numeroOS": "OS-2",
+      "dataEmissao": "25/03/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "25/03/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 8,
+        "valorTotal": 800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "25/03/2024",
+      "data_fim": "07/05/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "25/03/2024",
+          "fim": "15/04/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "16/04/2024",
+          "fim": "30/04/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "01/05/2024",
+          "fim": "07/05/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 3,
+    "urgencia": 4,
+    "tendencia": 5,
+    "gutScore": 60,
+    "tipo": "Melhoria",
+    "complexidade": "Baixa",
+    "udp": 8
+  },
+  {
+    "id": "3",
+    "identificacao": {
+      "numeroOS": "OS-3",
+      "dataEmissao": "25/03/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "25/03/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 37,
+        "valorTotal": 3700
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "25/03/2024",
+      "data_fim": "28/05/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "25/03/2024",
+          "fim": "30/04/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "01/05/2024",
+          "fim": "15/05/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e testes de ajustes",
+          "inicio": "16/05/2024",
+          "fim": "28/05/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 4,
+    "urgencia": 5,
+    "tendencia": 1,
+    "gutScore": 20,
+    "tipo": "Integração",
+    "complexidade": "Média",
+    "udp": 37
+  },
+  {
+    "id": "4",
+    "identificacao": {
+      "numeroOS": "OS-4",
+      "dataEmissao": "01/04/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "01/04/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 30,
+        "valorTotal": 3000
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "01/04/2024",
+      "data_fim": "13/05/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "01/04/2024",
+          "fim": "15/04/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "16/04/2024",
+          "fim": "30/04/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "01/05/2024",
+          "fim": "13/05/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 5,
+    "urgencia": 1,
+    "tendencia": 2,
+    "gutScore": 10,
+    "tipo": "Desenho",
+    "complexidade": "Baixa",
+    "udp": 30
+  },
+  {
+    "id": "5",
+    "identificacao": {
+      "numeroOS": "OS-5",
+      "dataEmissao": "08/04/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "08/04/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 39,
+        "valorTotal": 3900
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "08/04/2024",
+      "data_fim": "13/06/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "08/04/2024",
+          "fim": "30/04/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "01/05/2024",
+          "fim": "30/05/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "31/05/2024",
+          "fim": "13/06/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 1,
+    "urgencia": 2,
+    "tendencia": 3,
+    "gutScore": 6,
+    "tipo": "Melhoria",
+    "complexidade": "Média",
+    "udp": 39
+  },
+  {
+    "id": "6",
+    "identificacao": {
+      "numeroOS": "OS-6",
+      "dataEmissao": "15/04/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "15/04/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "horas",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 3,
+        "descricao": "Item 3 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 8,
+        "valorTotal": 800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "15/04/2024",
+      "data_fim": "19/04/2024",
+      "tabela": [
+        {
+          "item": 3,
+          "tarefaEntrega": "Planejamento da capacitação",
+          "inicio": "15/04/2024",
+          "fim": "16/04/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Execução dos treinamentos",
+          "inicio": "17/04/2024",
+          "fim": "18/04/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Avaliação e encerramento da capacitação",
+          "inicio": "19/04/2024",
+          "fim": "19/04/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 2,
+    "urgencia": 3,
+    "tendencia": 4,
+    "gutScore": 24,
+    "tipo": "Integração",
+    "complexidade": "",
+    "udp": 8
+  },
+  {
+    "id": "7",
+    "identificacao": {
+      "numeroOS": "OS-7",
+      "dataEmissao": "15/04/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "15/04/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "horas",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 3,
+        "descricao": "Item 3 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 20,
+        "valorTotal": 2000
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "15/04/2024",
+      "data_fim": "26/04/2024",
+      "tabela": [
+        {
+          "item": 3,
+          "tarefaEntrega": "Planejamento da capacitação",
+          "inicio": "15/04/2024",
+          "fim": "19/04/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Execução dos treinamentos",
+          "inicio": "20/04/2024",
+          "fim": "23/04/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Avaliação e encerramento da capacitação",
+          "inicio": "24/04/2024",
+          "fim": "26/04/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 3,
+    "urgencia": 4,
+    "tendencia": 5,
+    "gutScore": 60,
+    "tipo": "Desenho",
+    "complexidade": "",
+    "udp": 20
+  },
+  {
+    "id": "8",
+    "identificacao": {
+      "numeroOS": "OS-8",
+      "dataEmissao": "15/04/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "15/04/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 64,
+        "valorTotal": 6400
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "15/04/2024",
+      "data_fim": "23/07/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "15/04/2024",
+          "fim": "30/05/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "01/06/2024",
+          "fim": "30/06/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "01/07/2024",
+          "fim": "23/07/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 4,
+    "urgencia": 5,
+    "tendencia": 1,
+    "gutScore": 20,
+    "tipo": "Melhoria",
+    "complexidade": "Alta",
+    "udp": 64
+  },
+  {
+    "id": "9",
+    "identificacao": {
+      "numeroOS": "OS-9",
+      "dataEmissao": "30/04/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "30/04/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "users",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 1,
+        "descricao": "Item 1 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 35,
+        "valorTotal": 3500
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "30/04/2024",
+      "data_fim": "31/05/2024",
+      "tabela": [
+        {
+          "item": 1,
+          "tarefaEntrega": "Disponibilização da suíte BPMS em nuvem",
+          "inicio": "30/04/2024",
+          "fim": "15/05/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Configuração de licenças e acesso",
+          "inicio": "16/05/2024",
+          "fim": "25/05/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Suporte técnico inicial e relatório",
+          "inicio": "26/05/2024",
+          "fim": "31/05/2024"
+        }
+      ]
+    },
+    "status": "Encerrada",
+    "gravidade": 5,
+    "urgencia": 1,
+    "tendencia": 2,
+    "gutScore": 10,
+    "tipo": "Integração",
+    "complexidade": "",
+    "udp": 35
+  },
+  {
+    "id": "10",
+    "identificacao": {
+      "numeroOS": "OS-10",
+      "dataEmissao": "02/05/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "02/05/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 68,
+        "valorTotal": 6800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "02/05/2024",
+      "data_fim": "15/08/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "02/05/2024",
+          "fim": "30/06/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "01/07/2024",
+          "fim": "31/07/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "01/08/2024",
+          "fim": "15/08/2024"
+        }
+      ]
+    },
+    "status": "Pendente",
+    "gravidade": 1,
+    "urgencia": 2,
+    "tendencia": 3,
+    "gutScore": 6,
+    "tipo": "Desenho",
+    "complexidade": "Alta",
+    "udp": 68
+  },
+  {
+    "id": "11",
+    "identificacao": {
+      "numeroOS": "OS-11",
+      "dataEmissao": "06/05/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "06/05/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 39,
+        "valorTotal": 3900
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "06/05/2024",
+      "data_fim": "10/07/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "06/05/2024",
+          "fim": "30/05/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "31/05/2024",
+          "fim": "30/06/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "01/07/2024",
+          "fim": "10/07/2024"
+        }
+      ]
+    },
+    "status": "Em Análise",
+    "gravidade": 2,
+    "urgencia": 3,
+    "tendencia": 4,
+    "gutScore": 24,
+    "tipo": "Melhoria",
+    "complexidade": "Média",
+    "udp": 39
+  },
+  {
+    "id": "12",
+    "identificacao": {
+      "numeroOS": "OS-12",
+      "dataEmissao": "08/05/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "08/05/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "horas",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 3,
+        "descricao": "Item 3 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 8,
+        "valorTotal": 800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "08/05/2024",
+      "data_fim": "14/05/2024",
+      "tabela": [
+        {
+          "item": 3,
+          "tarefaEntrega": "Planejamento da capacitação",
+          "inicio": "08/05/2024",
+          "fim": "10/05/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Execução dos treinamentos",
+          "inicio": "11/05/2024",
+          "fim": "13/05/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Avaliação e encerramento da capacitação",
+          "inicio": "14/05/2024",
+          "fim": "14/05/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 3,
+    "urgencia": 4,
+    "tendencia": 5,
+    "gutScore": 60,
+    "tipo": "Integração",
+    "complexidade": "",
+    "udp": 8
+  },
+  {
+    "id": "13",
+    "identificacao": {
+      "numeroOS": "OS-13",
+      "dataEmissao": "17/05/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "17/05/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "horas",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 3,
+        "descricao": "Item 3 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 8,
+        "valorTotal": 800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "17/05/2024",
+      "data_fim": "23/05/2024",
+      "tabela": [
+        {
+          "item": 3,
+          "tarefaEntrega": "Planejamento da capacitação",
+          "inicio": "17/05/2024",
+          "fim": "19/05/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Execução dos treinamentos",
+          "inicio": "20/05/2024",
+          "fim": "22/05/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Avaliação e encerramento da capacitação",
+          "inicio": "23/05/2024",
+          "fim": "23/05/2024"
+        }
+      ]
+    },
+    "status": "Em Análise",
+    "gravidade": 4,
+    "urgencia": 5,
+    "tendencia": 1,
+    "gutScore": 20,
+    "tipo": "Desenho",
+    "complexidade": "",
+    "udp": 8
+  },
+  {
+    "id": "14",
+    "identificacao": {
+      "numeroOS": "OS-14",
+      "dataEmissao": "29/05/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "29/05/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "users",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 1,
+        "descricao": "Item 1 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 43,
+        "valorTotal": 4300
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "29/05/2024",
+      "data_fim": "30/06/2024",
+      "tabela": [
+        {
+          "item": 1,
+          "tarefaEntrega": "Disponibilização da suíte BPMS em nuvem",
+          "inicio": "29/05/2024",
+          "fim": "15/06/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Configuração de licenças e acesso",
+          "inicio": "16/06/2024",
+          "fim": "25/06/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Suporte técnico inicial e relatório",
+          "inicio": "26/06/2024",
+          "fim": "30/06/2024"
+        }
+      ]
+    },
+    "status": "Conclusão",
+    "gravidade": 5,
+    "urgencia": 1,
+    "tendencia": 2,
+    "gutScore": 10,
+    "tipo": "Melhoria",
+    "complexidade": "",
+    "udp": 43
+  },
+  {
+    "id": "15",
+    "identificacao": {
+      "numeroOS": "OS-15",
+      "dataEmissao": "03/06/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "03/06/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 38,
+        "valorTotal": 3800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "03/06/2024",
+      "data_fim": "13/08/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "03/06/2024",
+          "fim": "30/06/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "01/07/2024",
+          "fim": "31/07/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "01/08/2024",
+          "fim": "13/08/2024"
+        }
+      ]
+    },
+    "status": "Conclusão",
+    "gravidade": 1,
+    "urgencia": 2,
+    "tendencia": 3,
+    "gutScore": 6,
+    "tipo": "Integração",
+    "complexidade": "Média",
+    "udp": 38
+  },
+  {
+    "id": "16",
+    "identificacao": {
+      "numeroOS": "OS-16",
+      "dataEmissao": "04/06/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "04/06/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 28,
+        "valorTotal": 2800
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "04/06/2024",
+      "data_fim": "15/07/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "04/06/2024",
+          "fim": "25/06/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "26/06/2024",
+          "fim": "10/07/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "11/07/2024",
+          "fim": "15/07/2024"
+        }
+      ]
+    },
+    "status": "Não Iniciada",
+    "gravidade": 2,
+    "urgencia": 3,
+    "tendencia": 4,
+    "gutScore": 24,
+    "tipo": "Desenho",
+    "complexidade": "Baixa",
+    "udp": 28
+  },
+  {
+    "id": "17",
+    "identificacao": {
+      "numeroOS": "OS-17",
+      "dataEmissao": "10/06/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "10/06/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "horas",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 3,
+        "descricao": "Item 3 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 4,
+        "valorTotal": 400
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "10/06/2024",
+      "data_fim": "14/06/2024",
+      "tabela": [
+        {
+          "item": 3,
+          "tarefaEntrega": "Planejamento da capacitação",
+          "inicio": "10/06/2024",
+          "fim": "11/06/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Execução dos treinamentos",
+          "inicio": "12/06/2024",
+          "fim": "13/06/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Avaliação e encerramento da capacitação",
+          "inicio": "14/06/2024",
+          "fim": "14/06/2024"
+        }
+      ]
+    },
+    "status": "Para Aprovação",
+    "gravidade": 3,
+    "urgencia": 4,
+    "tendencia": 5,
+    "gutScore": 60,
+    "tipo": "Melhoria",
+    "complexidade": "",
+    "udp": 4
+  },
+  {
+    "id": "18",
+    "identificacao": {
+      "numeroOS": "OS-18",
+      "dataEmissao": "11/06/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "11/06/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "UDP",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 2,
+        "descricao": "Item 2 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 26,
+        "valorTotal": 2600
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "11/06/2024",
+      "data_fim": "24/07/2024",
+      "tabela": [
+        {
+          "item": 2,
+          "tarefaEntrega": "Análise e desenho do processo AS-IS",
+          "inicio": "11/06/2024",
+          "fim": "25/06/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Modelagem e melhoria TO-BE",
+          "inicio": "26/06/2024",
+          "fim": "10/07/2024"
+        },
+        {
+          "item": 2,
+          "tarefaEntrega": "Automatização e integração de sistemas",
+          "inicio": "11/07/2024",
+          "fim": "24/07/2024"
+        }
+      ]
+    },
+    "status": "Verificação",
+    "gravidade": 4,
+    "urgencia": 5,
+    "tendencia": 1,
+    "gutScore": 20,
+    "tipo": "Integração",
+    "complexidade": "Baixa",
+    "udp": 26
+  },
+  {
+    "id": "19",
+    "identificacao": {
+      "numeroOS": "OS-19",
+      "dataEmissao": "12/06/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "12/06/2024",
+      "fimVigencia": "31/12/2024",
+      "unidade": "horas",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 3,
+        "descricao": "Item 3 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 12,
+        "valorTotal": 1200
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "12/06/2024",
+      "data_fim": "20/06/2024",
+      "tabela": [
+        {
+          "item": 3,
+          "tarefaEntrega": "Planejamento da capacitação",
+          "inicio": "12/06/2024",
+          "fim": "14/06/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Execução dos treinamentos",
+          "inicio": "15/06/2024",
+          "fim": "17/06/2024"
+        },
+        {
+          "item": 3,
+          "tarefaEntrega": "Avaliação e encerramento da capacitação",
+          "inicio": "18/06/2024",
+          "fim": "20/06/2024"
+        }
+      ]
+    },
+    "status": "Em Execução",
+    "gravidade": 5,
+    "urgencia": 1,
+    "tendencia": 2,
+    "gutScore": 10,
+    "tipo": "Desenho",
+    "complexidade": "",
+    "udp": 12
+  },
+  {
+    "id": "20",
+    "identificacao": {
+      "numeroOS": "OS-20",
+      "dataEmissao": "27/06/2024",
+      "contratoNota": "TR-001",
+      "objetoContrato": "Análise Técnica",
+      "contratada": "Empresa Exemplo LTDA",
+      "cnpj": "12.345.678/0001-90",
+      "preposto": "Fulano de Tal",
+      "inicioVigencia": "27/06/2024",
+      "fimVigencia": "31/07/2024",
+      "unidade": "users",
+      "solicitante": "Solicitante TR",
+      "email": "solicitante@empresa.com"
+    },
+    "itens": [
+      {
+        "item": 1,
+        "descricao": "Item 1 do TR",
+        "metrica": "hora",
+        "valorUnitario": 100,
+        "quantidade": 55,
+        "valorTotal": 5500
+      }
+    ],
+    "cronograma": {
+      "data_inicio": "27/06/2024",
+      "data_fim": "31/07/2024",
+      "tabela": [
+        {
+          "item": 1,
+          "tarefaEntrega": "Disponibilização da suíte BPMS em nuvem",
+          "inicio": "27/06/2024",
+          "fim": "15/07/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Configuração de licenças e acesso",
+          "inicio": "16/07/2024",
+          "fim": "25/07/2024"
+        },
+        {
+          "item": 1,
+          "tarefaEntrega": "Suporte técnico inicial e relatório",
+          "inicio": "26/07/2024",
+          "fim": "31/07/2024"
+        }
+      ]
+    },
+    "status": "Em Execução",
+    "gravidade": 1,
+    "urgencia": 2,
+    "tendencia": 3,
+    "gutScore": 6,
+    "tipo": "Melhoria",
+    "complexidade": "",
+    "udp": 55
+  }
+]

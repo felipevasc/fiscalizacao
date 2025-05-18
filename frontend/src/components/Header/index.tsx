@@ -1,4 +1,5 @@
 import { BrHeader } from '@govbr-ds/react-components';
+import osIniciais from '../../assets/OS_TR.json';
 
 type HeaderProps = {
   title?: string;
@@ -36,15 +37,24 @@ const Header: React.FC<HeaderProps> = ({
           onClick: function Dc() {},
         },
         {
-          icon: 'adjust',
-          label: 'Funcionalidade 4',
-          onClick: function Dc() {},
+          //icone para resetar
+          icon: 'sync-alt',
+          label: 'Resetar OS',
+          onClick: () => {
+            if (osIniciais) {
+              localStorage.setItem('sistema_os', JSON.stringify(osIniciais));
+            }
+          },
         },
       ]}
       showLoginButton={true}
       density='small'
       loggedIn={true}
       quickAccessLinks={[
+        {
+          label: 'Acompanhamento',
+          onClick: () => (window.location.href = '/os/acompanhamento'),
+        },
         {
           label: 'Cadastrar OS',
           onClick: () => (window.location.href = '/os'),

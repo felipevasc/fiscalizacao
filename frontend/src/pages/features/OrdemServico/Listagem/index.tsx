@@ -1,39 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BrButton, BrCard, BrTag } from '@govbr-ds/react-components';
+import { BrButton, BrCard } from '@govbr-ds/react-components';
 import { Paper, Box, Typography, Grid } from '@mui/material';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 
-export type StatusOrdemServico =
-  | 'Não Iniciada'
-  | 'Em Análise'
-  | 'Em Execução'
-  | 'Para Aprovação'
-  | 'Verificação'
-  | 'Pendente'
-  | 'Conclusão'
-  | 'Encerrada'
-  | 'Cancelada';
-
-import type { IdentificacaoData } from '../components/Identificacao';
-import type { Item } from '../components/Itens';
-import type { DadosCronogramaType } from '../components/Cronograma';
 import { corPorPrioridade } from '../functions';
-
-export interface OrdemServico {
-  id?: string;
-  identificacao: IdentificacaoData;
-  itens: Item[];
-  cronograma: DadosCronogramaType;
-  instrucoes?: string;
-  status: StatusOrdemServico;
-  gravidade: number;
-  urgencia: number;
-  tendencia: number;
-  gutScore: number;
-}
+import type { OrdemServico } from '../types/OrdemServico';
 
 const CHAVE_STORAGE = 'sistema_os';
 
@@ -58,7 +32,7 @@ const Listagem = () => {
     navegar(`/os/editar/${id}`);
   };
 
-  const estiloCard = {
+  const estiloCard: React.CSSProperties = {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -195,7 +169,6 @@ const Listagem = () => {
                       sx={{ marginRight: 1, fontWeight: 500, color: '#333' }}>
                       Status:
                     </Typography>
-                    <BrTag type='status' color='danger' />
                     {os.status}
                   </Box>
                   <Box
@@ -236,6 +209,24 @@ const Listagem = () => {
                       {os.itens.length} item(ns) na OS.
                     </Typography>
                   )}
+                </Box>
+
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                  <Typography variant='body2' sx={{ fontWeight: 500, mr: 1 }}>
+                    Tipo:
+                  </Typography>
+                  <Typography variant='body2'>
+                    {os.tipo ?? 'Não informado'} —{' '}
+                    {os.complexidade ?? 'Não informado'}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Typography variant='body2' sx={{ fontWeight: 500, mr: 1 }}>
+                    UDP/Prazo:
+                  </Typography>
+                  <Typography variant='body2'>
+                    {os.udp ?? '-'} UDP, {os.prazoDiasUteis ?? '-'} dias úteis
+                  </Typography>
                 </Box>
 
                 <Box style={estiloAcoes}>

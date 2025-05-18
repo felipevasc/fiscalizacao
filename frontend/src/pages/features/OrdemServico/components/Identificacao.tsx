@@ -3,21 +3,9 @@ import Input from '../../../../components/Input';
 import Textarea from '../../../../components/Textarea';
 import FormGroup from '../../../../components/FormGroup';
 import Select, { type OptionProps } from '../../../../components/Select';
+import type { IdentificacaoData } from '../types/IdentificacaoData';
 
-export interface IdentificacaoData {
-  numeroOS: string;
-  dataEmissao: string;
-  contratoNota: string;
-  objetoContrato: string;
-  contratada: string;
-  cnpj: string;
-  preposto: string;
-  inicioVigencia: string;
-  fimVigencia: string;
-  unidade: string;
-  solicitante: string;
-  email: string;
-}
+
 
 interface IdentificacaoProps {
   identificacao: IdentificacaoData;
@@ -34,6 +22,7 @@ const Identificacao: React.FC<IdentificacaoProps> = ({
   const handleChange = (field: keyof IdentificacaoData, value: string) => {
     onChange({
       ...identificacao,
+      dataEmissao: (new Date()).toLocaleDateString('pt-BR'),
       [field]: value,
     });
   };
@@ -48,7 +37,7 @@ const Identificacao: React.FC<IdentificacaoProps> = ({
         />
         <Input
           label='Data de Emissão'
-          value={identificacao.dataEmissao}
+          value={(new Date()).toLocaleDateString('pt-BR')}
           onChange={(e) => handleChange('dataEmissao', e.target.value)}
         />
       </FormGroup>

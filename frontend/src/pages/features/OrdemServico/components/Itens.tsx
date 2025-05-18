@@ -10,15 +10,7 @@ import {
   TableFooter,
 } from '@mui/material';
 import { BrButton } from '@govbr-ds/react-components';
-
-export interface Item {
-  item: string;
-  descricao: string;
-  metrica: string;
-  valorUnitario: number;
-  quantidade: number;
-  valorTotal: number;
-}
+import type { Item } from '../types/Item';
 
 interface ItensProps {
   itens: Item[];
@@ -85,7 +77,10 @@ const Itens: React.FC<ItensProps> = ({ itens, onChange }) => {
 
   return (
     <>
-      <BrButton secondary={true} type='button' onClick={() => setShowModal(true)}>
+      <BrButton
+        secondary={true}
+        type='button'
+        onClick={() => setShowModal(true)}>
         Adicionar item
       </BrButton>
       <Modal

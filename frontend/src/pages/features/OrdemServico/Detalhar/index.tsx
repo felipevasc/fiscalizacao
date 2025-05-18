@@ -17,8 +17,9 @@ import IconeVoltar from '@mui/icons-material/ArrowBack';
 import { BrButton, BrTag } from '@govbr-ds/react-components';
 
 import Timeline from '../components/Timeline';
-import type { OrdemServico, StatusOrdemServico } from '../Listagem';
 import { corPorPrioridade, rotuloPorPrioridade } from '../functions';
+import type { OrdemServico } from '../types/OrdemServico';
+import type { StatusOrdemServico } from '../types/StatusOrdemServico';
 
 const CHAVE_STORAGE = 'sistema_os';
 
@@ -26,15 +27,17 @@ const obterTipoTagPorStatus = (
   status: StatusOrdemServico
 ): 'info' | 'success' | 'warning' | 'danger' | 'primary' | undefined => {
   switch (status) {
-    case 'Nova':
+    case 'Não Iniciada':
       return 'info';
-    case 'Em Andamento':
+    case 'Em Execução':
       return 'primary';
-    case 'Pendente':
+    case 'Em Análise':
       return 'warning';
-    case 'Concluída':
+    case 'Conclusão':
       return 'success';
     case 'Cancelada':
+    case 'Verificação':
+    case 'Pendente':
       return 'danger';
     default:
       return undefined;
@@ -126,7 +129,7 @@ const DetalheOS = () => {
             A Ordem de Serviço que você está tentando acessar não foi
             encontrada. Pode ter sido removida ou o ID é inválido.
           </Typography>
-          <BrButton variant='primary' onClick={() => navegar('/os')}>
+          <BrButton secondary={true} onClick={() => navegar('/os')}>
             Voltar para a Listagem
           </BrButton>
         </Paper>
@@ -140,7 +143,7 @@ const DetalheOS = () => {
     rotulo,
     valor,
   }) => (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid>
       <Typography
         variant='body2'
         component='div'
@@ -170,8 +173,7 @@ const DetalheOS = () => {
       }}>
       <BrButton
         type='button'
-        variant='text'
-        density='small'
+        size='small'
         onClick={() => navegar(-1)}
         style={{ marginBottom: '24px', color: '#005A9C' }}>
         <IconeVoltar fontSize='small' sx={{ mr: 0.5 }} />
@@ -192,7 +194,12 @@ const DetalheOS = () => {
           sx={{ fontWeight: 600, color: '#1F4C73', mr: 2 }}>
           Detalhes da OS Nº {identificacao.numeroOS || os.id}
         </Typography>
-        {status && <BrTag type={obterTipoTagPorStatus(status)}>{status}</BrTag>}
+        {status && (
+          <>
+            <BrTag type='status' className={obterTipoTagPorStatus(status)} />
+            {status}
+          </>
+        )}
       </Box>
 
       <Paper sx={estiloCardSecao} elevation={0}>
@@ -263,6 +270,13 @@ const DetalheOS = () => {
           <ItemInfo
             rotulo='E-mail do Solicitante'
             valor={identificacao.email}
+          />
+          <ItemInfo rotulo='Tipo' valor={os.tipo} />
+          <ItemInfo rotulo='Complexidade' valor={os.complexidade} />
+          <ItemInfo rotulo='UDP' valor={os.udp?.toString()} />
+          <ItemInfo
+            rotulo='Prazo (dias úteis)'
+            valor={os.prazoDiasUteis ? os.prazoDiasUteis.toString() : undefined}
           />
         </Grid>
       </Paper>

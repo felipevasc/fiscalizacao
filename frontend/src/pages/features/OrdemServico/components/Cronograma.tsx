@@ -1,19 +1,8 @@
 import React from 'react';
 import Input from '../../../../components/Input';
 import Timeline from './Timeline';
-
-interface LinhaCronograma {
-  item: number;
-  tarefaEntrega: string;
-  inicio: string; 
-  fim: string;
-}
-
-export interface DadosCronogramaType {
-  data_inicio: string; 
-  data_fim: string;
-  tabela: LinhaCronograma[];
-}
+import type { DadosCronogramaType } from '../types/DadosCronogramaType';
+import type { LinhaCronograma } from '../types/LinhaCronograma';
 
 interface CronogramaProps {
   dados: DadosCronogramaType;
@@ -32,17 +21,6 @@ const aplicarMascaraData = (valor: string) => {
 };
 
 const Cronograma: React.FC<CronogramaProps> = ({ dados, onChange }) => {
-  const handleDataChange = (
-    field: 'data_inicio' | 'data_fim',
-    value: string
-  ) => {
-    const valorFormatado = aplicarMascaraData(value);
-    onChange({
-      ...dados,
-      [field]: valorFormatado,
-    });
-  };
-
   const handleTabelaChange = (
     index: number,
     field: keyof Omit<LinhaCronograma, 'item'>,
@@ -53,9 +31,26 @@ const Cronograma: React.FC<CronogramaProps> = ({ dados, onChange }) => {
 
     const novaTabela = [...dados.tabela];
     novaTabela[index] = { ...novaTabela[index], [field]: valorFormatado };
+    //Buscar a menor data de início na tabela
+    const dataInicio = novaTabela.reduce((menor, linha) => {
+      const dataAtual = new Date(
+        linha.inicio.split('/').reverse().join('-') + 'T04:00:00'
+      );
+      return menor && dataAtual > menor ? menor : dataAtual;
+    }, undefined as Date | undefined);
+    const dataFim = novaTabela.reduce((maior, linha) => {
+      const dataAtual = new Date(
+        linha.fim.split('/').reverse().join('-') + 'T04:00:00'
+      );
+      return maior && dataAtual < maior ? maior : dataAtual;
+    }, undefined as Date | undefined);
     onChange({
       ...dados,
       tabela: novaTabela,
+      data_inicio: dataInicio
+        ? dataInicio.toLocaleDateString('pt-BR')
+        : dados.data_inicio,
+      data_fim: dataFim ? dataFim.toLocaleDateString('pt-BR') : dados.data_fim,
     });
   };
 
@@ -89,29 +84,7 @@ const Cronograma: React.FC<CronogramaProps> = ({ dados, onChange }) => {
 
   return (
     <div>
-      <div className='h4'>Datas e prazos previstos</div>
-      <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-        <div style={{ flex: 1 }}>
-          <Input
-            label='Data de Início'
-            value={dados.data_inicio}
-            placeholder='dd/mm/aaaa'
-            maxLength={10}
-            onChange={(e) => handleDataChange('data_inicio', e.target.value)}
-          />
-        </div>
-        <div style={{ flex: 1 }}>
-          <Input
-            label='Data do Fim'
-            value={dados.data_fim}
-            placeholder='dd/mm/aaaa'
-            maxLength={10}
-            onChange={(e) => handleDataChange('data_fim', e.target.value)}
-          />
-        </div>
-      </div>
-
-      <h4>CRONOGRAMA DE EXECUÇÃO/ENTREGA</h4>
+      <div className='h4'>Cronograma de execução/entrega</div>
       <Timeline cronograma={dados} />
       <table
         style={{

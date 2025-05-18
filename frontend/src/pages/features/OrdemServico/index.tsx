@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Cadastrar from './components/Cadastrar';
-import type { OrdemServico, StatusOrdemServico } from './Listagem';
+import type { OrdemServico as TipoOrdemServico } from './types/OrdemServico';
+import type { StatusOrdemServico } from './types/StatusOrdemServico';
+import osIniciais from '../../../assets/OS_TR.json';
 
 const CHAVE_STORAGE = 'sistema_os';
 
@@ -9,15 +11,24 @@ const OrdemServico = () => {
   const { id } = useParams<{ id: string }>();
   const navegar = useNavigate();
 
-  const [osEditar, setOsEditar] = useState<OrdemServico | undefined>(undefined);
+  const [osEditar, setOsEditar] = useState<TipoOrdemServico | undefined>(
+    undefined
+  );
   const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    const armazenado = localStorage.getItem(CHAVE_STORAGE);
+    if (!armazenado) {
+      localStorage.setItem(CHAVE_STORAGE, JSON.stringify(osIniciais));
+    }
+  }, []);
 
   useEffect(() => {
     if (id) {
       const armazenado = localStorage.getItem(CHAVE_STORAGE);
       if (armazenado) {
         try {
-          const lista: OrdemServico[] = JSON.parse(armazenado);
+          const lista: TipoOrdemServico[] = JSON.parse(armazenado);
           const encontrada = lista.find((os) => os.id === id);
           if (encontrada) {
             setOsEditar(encontrada);
@@ -38,10 +49,10 @@ const OrdemServico = () => {
   }, [id, navegar]);
 
   const salvarOS = (
-    dados: Omit<OrdemServico, 'id'> & { status: StatusOrdemServico }
+    dados: Omit<TipoOrdemServico, 'id'> & { status: StatusOrdemServico }
   ) => {
     const armazenado = localStorage.getItem(CHAVE_STORAGE);
-    let lista: OrdemServico[] = armazenado ? JSON.parse(armazenado) : [];
+    let lista: TipoOrdemServico[] = armazenado ? JSON.parse(armazenado) : [];
 
     if (id && osEditar) {
       lista = lista.map((os) => (os.id === id ? { ...os, ...dados, id } : os));
@@ -58,7 +69,11 @@ const OrdemServico = () => {
     return <div>Carregando...</div>;
   }
 
-  return <Cadastrar osEditar={osEditar} onSubmit={salvarOS} />;
+  return (
+    <>
+      <Cadastrar osEditar={osEditar} onSubmit={salvarOS} />
+    </>
+  );
 };
 
 export default OrdemServico;

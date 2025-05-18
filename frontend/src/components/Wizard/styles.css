@@ -1,0 +1,9 @@
+.br-wizard[vertical] .wizard-progress-btn:before {
+  padding-top: 3px;
+}
+
+@media (max-width: 991px) {
+  .br-wizard[vertical] .wizard-progress:after {
+    display: none !important;
+  }
+}

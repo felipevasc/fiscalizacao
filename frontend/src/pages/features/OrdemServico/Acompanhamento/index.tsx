@@ -5,9 +5,11 @@ import {
   Draggable as Arrastavel,
   type DropResult as ResultadoArraste,
 } from 'react-beautiful-dnd';
-import type { OrdemServico, StatusOrdemServico } from '../Listagem';
 import { StrictModeDroppable as DroppableModoEstrito } from './StrictModeDroppable';
 import Timeline from '../components/Timeline';
+import type { OrdemServico } from '../types/OrdemServico';
+import type { StatusOrdemServico } from '../types/StatusOrdemServico';
+import { calcularPrazo } from '../functions';
 
 interface MedidorPrioridadeProps {
   valor: number;
@@ -200,7 +202,7 @@ const AcompanhamentoOrdensServico: React.FC = () => {
                     sx={{
                       mb: 1,
                       fontWeight: 600,
-                      color: '#003366',
+                      color: '#666',
                       display: 'flex',
                       justifyContent: 'space-between',
                     }}>
@@ -209,12 +211,18 @@ const AcompanhamentoOrdensServico: React.FC = () => {
                       component='span'
                       variant='body2'
                       sx={{
-                        bgcolor: '#005EA2',
-                        color: '#FFF',
+                        bgcolor: '#005EA2ee',
+                        color: '#f5f5f5',
                         px: 1,
+                        py: 0.5,
                         borderRadius: 1,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontWeight: 'bold',
+                        fontFamily: 'monospace',
                       }}>
-                      {ordensNaBaia.length}
+                      {ordensNaBaia.length.toLocaleString('pt-BR').padStart(2, '0')}
                     </Typography>
                   </Typography>
 
@@ -244,22 +252,77 @@ const AcompanhamentoOrdensServico: React.FC = () => {
                                 ? 'scale(1.02)'
                                 : 'none',
                               transition: 'all 0.2s',
-                            }}>
-                            <Typography
-                              variant='subtitle2'
-                              sx={{ fontWeight: 'bold' }}>
-                              OS {ordem.identificacao.numeroOS || ordem.id}
-                            </Typography>
-                            <Typography variant='body2' sx={{ mb: 1 }}>
-                              {ordem.identificacao.unidade}
-                            </Typography>
-                            <MedidorPrioridade
-                              valor={ordem.pontuacaoGUT}
-                              max={125}
-                            />
+                            }}
+                            style={{ position: 'relative' }}>
+                            <div
+                              style={{
+                                fontSize: 10,
+                                fontFamily: 'cursive',
+                                backgroundColor:
+                                  ordem.tipo === 'Desenho'
+                                    ? '#FB8C00bb'
+                                    : ordem.tipo === 'Integração'
+                                    ? '#2E7D32aa'
+                                    : '#005EA2aa',
+                                position: 'absolute',
+                                right: 1,
+                                top: 1,
+                                borderTopRightRadius: 4,
+                                padding: '2px 4px',
+                                color: '#fff',
+                                fontWeight: 'bold',
+                              }}>
+                              {ordem.tipo ?? 'Tipo não informado'}
+                            </div>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                position: 'relative',
+                              }}>
+                              <Typography
+                                variant='subtitle2'
+                                sx={{ fontWeight: 'bold' }}>
+                                OS {ordem.identificacao.numeroOS || ordem.id}
+                              </Typography>
+                            </div>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                              }}>
+                              <MedidorPrioridade
+                                valor={ordem.pontuacaoGUT}
+                                max={125}
+                              />
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  borderRadius: '50%',
+                                  border: '6px double #005EA2aa',
+                                  width: 60,
+                                  height: 60,
+                                  fontSize: 10,
+                                  fontWeight: 'bold',
+                                  fontFamily: 'monospace',
+                                }}>
+                                <div>{ordem.udp ?? '-'}</div>
+                                <div>{Number(ordem.itens?.[0]?.item ?? '0') === 1 ? 'users' : Number(ordem.itens?.[0]?.item ?? '0') === 3 ? 'horas' : 'UDP'}</div>
+                              </div>
+                            </div>
                             <Box sx={{ mt: 1 }}>
                               <Timeline cronograma={ordem.cronograma} />
                             </Box>
+                            <Typography
+                              variant='body2'
+                              sx={{ fontStyle: 'italic' }}>
+                              SLA: {calcularPrazo(ordem) ?? '-'} dias úteis
+                            </Typography>
                           </Paper>
                         )}
                       </Arrastavel>

@@ -175,7 +175,7 @@ const Timeline: React.FC<TimelineProps> = ({ cronograma }) => {
                 variant='body2'
                 title={linha.tarefaEntrega}
                 sx={{
-                  width: { xs: '120px', sm: '180px', md: '220px' }, // Largura responsiva do label
+                  width: { xs: '120px', sm: '180px', md: '220px' },
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -183,6 +183,7 @@ const Timeline: React.FC<TimelineProps> = ({ cronograma }) => {
                   fontWeight: 500,
                   paddingRight: '12px',
                   flexShrink: 0,
+                  maxWidth: '60%',
                 }}>
                 {linha.tarefaEntrega || '(Tarefa não descrita)'}
               </Typography>

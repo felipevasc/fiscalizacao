@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import Inicio from '../pages/features/Inicio';
-import OrdemServico from '../pages/features/OrdemServico';
+import TipoOrdemServico from '../pages/features/OrdemServico';
 import Indicadores from '../pages/features/Indicadores';
 import Listagem from '../pages/features/OrdemServico/Listagem';
 import OsDetalhe from '../pages/features/OrdemServico/Detalhar';
@@ -13,9 +13,9 @@ const RotasInternas = () => {
         <Route path='/' element={<Inicio />} />
         <Route path='/os' element={<Listagem />} />
         <Route path='/indicadores' element={<Indicadores />} />
-        <Route path='/os/cadastrar' element={<OrdemServico />} />
+        <Route path='/os/cadastrar' element={<TipoOrdemServico />} />
         <Route path='/os/detalhar/:id' element={<OsDetalhe />} />
-        <Route path='/os/editar/:id' element={<OrdemServico />} />
+        <Route path='/os/editar/:id' element={<TipoOrdemServico />} />
         <Route path="/os/acompanhamento" element={<AcompanhamentoOS />} />
       </Routes>
     </BrowserRouter>
