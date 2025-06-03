@@ -22,5 +22,5 @@ export type MensagensStoreType = {
   setLida: (idMessage: string) => void;
   removerMensagem: (idMessage: string) => void;
   enqueue: (mensagem: MensagemStoreType) => void;
-  exibirMensagens: (mensagens?: any[]) => void;
+  exibirMensagens: (mensagens?: { mensagem: string; tipo: TipoAlertMessage }[]) => void;
 };

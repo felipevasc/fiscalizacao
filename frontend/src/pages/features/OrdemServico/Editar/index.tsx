@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Cadastrar from '../components/Cadastrar';
 import type { OrdemServico } from '../types/OrdemServico';
-import type { IdentificacaoData } from '../types/IdentificacaoData';
-import type { Item } from '../types/Item';
-import type { DadosCronogramaType } from '../types/DadosCronogramaType';
 
 const STORAGE_KEY = 'sistema_os';
 
@@ -35,12 +32,7 @@ const OsEditar = () => {
     setLoading(false);
   }, [id, navigate]);
 
-  const handleSalvar = (dados: {
-    identificacao: IdentificacaoData;
-    itens: Item[];
-    cronograma: DadosCronogramaType;
-    instrucoes?: string;
-  }) => {
+  const handleSalvar = (dados: Omit<OrdemServico, 'id'>) => {
     if (!os) return;
 
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -51,10 +43,7 @@ const OsEditar = () => {
       o.id === id
         ? {
             ...o,
-            identificacao: dados.identificacao,
-            itens: dados.itens,
-            cronograma: dados.cronograma,
-            instrucoes: dados.instrucoes,
+            ...dados,
           }
         : o
     );

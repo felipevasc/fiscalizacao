@@ -1,10 +1,9 @@
-import { useState, useEffect, type FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import Card from '../../../../components/Card';
 import { type OptionProps } from '../../../../components/Select';
 import Textarea from '../../../../components/Textarea';
 import Itens from './Itens';
 import Select from '../../../../components/Select';
-import { BrButton } from '@govbr-ds/react-components';
 
 import { calcularUdpPrazo } from '../functions';
 import type { StatusOrdemServico } from '../types/StatusOrdemServico';
@@ -66,9 +65,15 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
   const [cronograma, setCronograma] = useState<DadosCronogramaType>(
     osEditar?.cronograma || { data_inicio: '', data_fim: '', tabela: [] }
   );
-  const [gravidade, setGravidade] = useState<string>();
-  const [urgencia, setUrgencia] = useState<string>();
-  const [tendencia, setTendencia] = useState<string>();
+  const [gravidade, setGravidade] = useState<string | undefined>(
+    osEditar?.gravidade !== undefined ? String(osEditar.gravidade) : undefined
+  );
+  const [urgencia, setUrgencia] = useState<string | undefined>(
+    osEditar?.urgencia !== undefined ? String(osEditar.urgencia) : undefined
+  );
+  const [tendencia, setTendencia] = useState<string | undefined>(
+    osEditar?.tendencia !== undefined ? String(osEditar.tendencia) : undefined
+  );
   const [tipo, setTipo] = useState<TipoOrdemServico>(osEditar?.tipo || '');
   const [complexidade, setComplexidade] = useState<ComplexidadeOrdemServico>(
     osEditar?.complexidade || ''
@@ -96,6 +101,10 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
     osEditar?.status ?? 'Não Iniciada'
   );
 
+  const handleSetGravidade = (val?: string) => setGravidade(val);
+  const handleSetUrgencia = (val?: string) => setUrgencia(val);
+  const handleSetTendencia = (val?: string) => setTendencia(val);
+
   useEffect(() => {
     if (osEditar) {
       setItens(osEditar.itens);
@@ -103,6 +112,21 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
       setIdentificacao(osEditar.identificacao);
       setInstrucoes(osEditar.instrucoes || '');
       setStatus(osEditar.status);
+      setGravidade(
+        osEditar.gravidade !== undefined
+          ? String(osEditar.gravidade)
+          : undefined
+      );
+      setUrgencia(
+        osEditar.urgencia !== undefined
+          ? String(osEditar.urgencia)
+          : undefined
+      );
+      setTendencia(
+        osEditar.tendencia !== undefined
+          ? String(osEditar.tendencia)
+          : undefined
+      );
     }
   }, [osEditar]);
 
@@ -198,10 +222,10 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
             conteudo: (
               <MatrizGUT
                 gravidade={gravidade}
-                setGravidade={setGravidade}
-                setTendencia={setTendencia}
+                setGravidade={handleSetGravidade}
+                setTendencia={handleSetTendencia}
                 tendencia={tendencia}
-                setUrgencia={setUrgencia}
+                setUrgencia={handleSetUrgencia}
                 urgencia={urgencia}
               />
             ),
