@@ -2,6 +2,7 @@ import { useState } from "react";
 import type {
   MensagemStoreType,
   MensagensStoreType,
+  TipoAlertMessage,
 } from "../types/MensagensStoreType";
 
 const useMensagensHandler = (): MensagensStoreType => {
@@ -22,7 +23,9 @@ const useMensagensHandler = (): MensagensStoreType => {
     setMensagensErro((msgs) =>
       msgs.map((m) => (m.id === idMessage ? { ...m, lida: true } : m))
     );
-  const exibirMensagens = (mensagens?: any[]) => {
+  const exibirMensagens = (
+    mensagens?: { mensagem: string; tipo: TipoAlertMessage }[]
+  ) => {
     mensagens?.forEach((m) => {
       enqueue({
         lida: false,
