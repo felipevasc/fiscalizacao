@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Card from '../../../../components/Card';
 import { type OptionProps } from '../../../../components/Select';
 import Textarea from '../../../../components/Textarea';
 import Itens from './Itens';
@@ -58,9 +57,14 @@ const STATUS_OPTIONS: StatusOrdemServico[] = [
 interface PropsCadastrar {
   onSubmit?: (dados: OrdemServico) => void;
   osEditar?: OrdemServico;
+  avaliar?: boolean;
 }
 
-const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
+const Cadastrar: React.FC<PropsCadastrar> = ({
+  onSubmit,
+  osEditar,
+  avaliar,
+}) => {
   const [itens, setItens] = useState<Item[]>(osEditar?.itens || []);
   const [cronograma, setCronograma] = useState<DadosCronogramaType>(
     osEditar?.cronograma || { data_inicio: '', data_fim: '', tabela: [] }
@@ -118,9 +122,7 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
           : undefined
       );
       setUrgencia(
-        osEditar.urgencia !== undefined
-          ? String(osEditar.urgencia)
-          : undefined
+        osEditar.urgencia !== undefined ? String(osEditar.urgencia) : undefined
       );
       setTendencia(
         osEditar.tendencia !== undefined
@@ -159,84 +161,94 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
     }
   };
 
+  const passosOS = () => {
+    const passos = [];
+    if (!avaliar) {
+      passos.push({
+        titulo: 'Identificação',
+        conteudo: (
+          <Identificacao
+            options={OPTIONS}
+            identificacao={identificacao}
+            onChange={setIdentificacao}
+          />
+        ),
+      });
+      passos.push({
+        titulo: 'Especificações',
+        conteudo: (
+          <>
+            <Itens itens={itens} onChange={setItens} />
+            <hr />
+            <Textarea
+              label='Instruções/Especificações complementares'
+              value={instrucoes}
+              onChange={(e) => setInstrucoes(e.target.value)}
+            />
+            <hr />
+            <Select
+              label='Status'
+              options={STATUS_OPTIONS}
+              value={status}
+              onChange={(v) => setStatus(v as StatusOrdemServico)}
+            />
+          </>
+        ),
+      });
+      passos.push({
+        titulo: 'Especificações',
+        conteudo: (
+          <>
+            <Itens itens={itens} onChange={setItens} />
+            <hr />
+            <Textarea
+              label='Instruções/Especificações complementares'
+              value={instrucoes}
+              onChange={(e) => setInstrucoes(e.target.value)}
+            />
+          </>
+        ),
+      });
+    }
+    passos.push({
+      titulo: 'Cronograma',
+      conteudo: <Cronograma dados={cronograma} onChange={setCronograma} />,
+    });
+    passos.push({
+      titulo: 'Dimensionamento',
+      conteudo: (
+        <Dimensionamento
+          setComplexidade={setComplexidade}
+          setTipo={setTipo}
+          complexidade={complexidade}
+          tipo={tipo}
+        />
+      ),
+    });
+    passos.push({
+      titulo: 'Priorização',
+      conteudo: (
+        <MatrizGUT
+          gravidade={gravidade}
+          setGravidade={handleSetGravidade}
+          setTendencia={handleSetTendencia}
+          tendencia={tendencia}
+          setUrgencia={handleSetUrgencia}
+          urgencia={urgencia}
+        />
+      ),
+    });
+    return passos;
+  };
+
   return (
-    <Card
-      title={osEditar ? 'Editar Ordem de Serviço' : 'Cadastrar nova OS'}
-      subtitle='Informe os campos necessários'>
-      <Wizard
-        passos={[
-          {
-            titulo: 'Identificação',
-            conteudo: (
-              <Identificacao
-                options={OPTIONS}
-                identificacao={identificacao}
-                onChange={setIdentificacao}
-              />
-            ),
-          },
-          {
-            titulo: 'Status da OS',
-            conteudo: (
-              <Select
-                label='Status'
-                options={STATUS_OPTIONS}
-                value={status}
-                onChange={(v) => setStatus(v as StatusOrdemServico)}
-              />
-            ),
-          },
-          {
-            titulo: 'Especificações',
-            conteudo: (
-              <>
-                <Itens itens={itens} onChange={setItens} />
-                <hr />
-                <Textarea
-                  label='Instruções/Especificações complementares'
-                  value={instrucoes}
-                  onChange={(e) => setInstrucoes(e.target.value)}
-                />
-              </>
-            ),
-          },
-          {
-            titulo: 'Cronograma',
-            conteudo: (
-              <Cronograma dados={cronograma} onChange={setCronograma} />
-            ),
-          },
-          {
-            titulo: 'Dimensionamento',
-            conteudo: (
-              <Dimensionamento
-                setComplexidade={setComplexidade}
-                setTipo={setTipo}
-                complexidade={complexidade}
-                tipo={tipo}
-              />
-            ),
-          },
-          {
-            titulo: 'Priorização',
-            conteudo: (
-              <MatrizGUT
-                gravidade={gravidade}
-                setGravidade={handleSetGravidade}
-                setTendencia={handleSetTendencia}
-                tendencia={tendencia}
-                setUrgencia={handleSetUrgencia}
-                urgencia={urgencia}
-              />
-            ),
-          },
-        ]}
-        ativo={passoAtivo}
-        alterar={(i) => setPassoAtivo(i)}
-        cancelar={() => (window.location.href = '/os')}
-        concluir={() => handleSubmit()}
-      />
-    </Card>
+    <Wizard
+      passos={passosOS()}
+      ativo={passoAtivo}
+      alterar={(i) => setPassoAtivo(i)}
+      cancelar={() => (window.location.href = '/os')}
+      concluir={() => handleSubmit()}
+    />
   );
 };
 

@@ -16,6 +16,7 @@ const RotasInternas = () => {
         <Route path='/os/cadastrar' element={<TipoOrdemServico />} />
         <Route path='/os/detalhar/:id' element={<OsDetalhe />} />
         <Route path='/os/editar/:id' element={<TipoOrdemServico />} />
+        <Route path='/os/avaliar/:id' element={<TipoOrdemServico avaliar={true} />} />
         <Route path="/os/acompanhamento" element={<AcompanhamentoOS />} />
       </Routes>
     </BrowserRouter>

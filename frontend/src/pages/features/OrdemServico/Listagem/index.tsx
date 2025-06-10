@@ -6,7 +6,7 @@ import { Paper, Box, Typography, Grid } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { corPorPrioridade } from '../functions';
+import { calcularPrazo, calcularTipo, corPorPrioridade } from '../functions';
 import type { OrdemServico } from '../types/OrdemServico';
 
 const CHAVE_STORAGE = 'sistema_os';
@@ -30,6 +30,11 @@ const Listagem = () => {
   const editarOS = (id: string | undefined) => {
     if (!id) return;
     navegar(`/os/editar/${id}`);
+  };
+
+  const avaliarOS = (id: string | undefined) => {
+    if (!id) return;
+    navegar(`/os/avaliar/${id}`);
   };
 
   const estiloCard: React.CSSProperties = {
@@ -210,23 +215,25 @@ const Listagem = () => {
                     </Typography>
                   )}
                 </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                  <Typography variant='body2' sx={{ fontWeight: 500, mr: 1 }}>
-                    Tipo:
-                  </Typography>
-                  <Typography variant='body2'>
-                    {os.tipo ?? 'Não informado'} —{' '}
-                    {os.complexidade ?? 'Não informado'}
-                  </Typography>
-                </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Typography variant='body2' sx={{ fontWeight: 500, mr: 1 }}>
-                    UDP/Prazo:
-                  </Typography>
-                  <Typography variant='body2'>
-                    {os.udp ?? '-'} UDP, {os.prazoDiasUteis ?? '-'} dias úteis
-                  </Typography>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}>
+                    <div>
+                      <Typography
+                        variant='body2'
+                        sx={{ fontWeight: 500, mr: 1 }}>
+                        {os.udp ?? '-'} {calcularTipo(os)}
+                      </Typography>
+                    </div>
+                    <Typography variant='body2'>
+                      {calcularPrazo(os) ?? '-'} dias úteis
+                    </Typography>
+                  </div>
                 </Box>
 
                 <Box style={estiloAcoes}>
@@ -250,6 +257,17 @@ const Listagem = () => {
                       sx={{ mr: 0.5, verticalAlign: 'middle' }}
                     />{' '}
                     Editar
+                  </BrButton>
+                  <BrButton
+                    type='button'
+                    size='small'
+                    secondary={true}
+                    onClick={() => avaliarOS(os.id)}>
+                    <EditIcon
+                      fontSize='small'
+                      sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                    />{' '}
+                    Avaliar
                   </BrButton>
                 </Box>
               </BrCard>

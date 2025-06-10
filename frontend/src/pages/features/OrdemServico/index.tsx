@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cadastrar from './components/Cadastrar';
 import type { OrdemServico as TipoOrdemServico } from './types/OrdemServico';
 import type { StatusOrdemServico } from './types/StatusOrdemServico';
@@ -7,7 +7,11 @@ import osIniciais from '../../../assets/OS_TR.json';
 
 const CHAVE_STORAGE = 'sistema_os';
 
-const OrdemServico = () => {
+type OrdemServicoProps = {
+  avaliar?: boolean;
+};
+
+const OrdemServico: React.FC<OrdemServicoProps> = ({ avaliar }) => {
   const { id } = useParams<{ id: string }>();
   const navegar = useNavigate();
 
@@ -70,9 +74,7 @@ const OrdemServico = () => {
   }
 
   return (
-    <>
-      <Cadastrar osEditar={osEditar} onSubmit={salvarOS} />
-    </>
+    <Cadastrar osEditar={osEditar} onSubmit={salvarOS} avaliar={avaliar} />
   );
 };
 

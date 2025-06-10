@@ -9,7 +9,7 @@ import { StrictModeDroppable as DroppableModoEstrito } from './StrictModeDroppab
 import Timeline from '../components/Timeline';
 import type { OrdemServico } from '../types/OrdemServico';
 import type { StatusOrdemServico } from '../types/StatusOrdemServico';
-import { calcularPrazo } from '../functions';
+import { calcularPrazo, calcularTipo } from '../functions';
 
 interface MedidorPrioridadeProps {
   valor: number;
@@ -222,7 +222,9 @@ const AcompanhamentoOrdensServico: React.FC = () => {
                         fontWeight: 'bold',
                         fontFamily: 'monospace',
                       }}>
-                      {ordensNaBaia.length.toLocaleString('pt-BR').padStart(2, '0')}
+                      {ordensNaBaia.length
+                        .toLocaleString('pt-BR')
+                        .padStart(2, '0')}
                     </Typography>
                   </Typography>
 
@@ -312,7 +314,7 @@ const AcompanhamentoOrdensServico: React.FC = () => {
                                   fontFamily: 'monospace',
                                 }}>
                                 <div>{ordem.udp ?? '-'}</div>
-                                <div>{Number(ordem.itens?.[0]?.item ?? '0') === 1 ? 'users' : Number(ordem.itens?.[0]?.item ?? '0') === 3 ? 'horas' : 'UDP'}</div>
+                                <div>{calcularTipo(ordem)}</div>
                               </div>
                             </div>
                             <Box sx={{ mt: 1 }}>

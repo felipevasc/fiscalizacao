@@ -77,12 +77,12 @@ const Identificacao: React.FC<IdentificacaoProps> = ({
         <Input
           label='Início Vigência'
           value={identificacao.inicioVigencia}
-          onChange={(e) => handleChange('inicioVigencia', e.target.value)}
+          onChange={(e) => handleChange('inicioVigencia', e.target.value?.replace(/\D/g, '').replace(/(\d{1,2})(\d{1,2})(\d{1,4})/, "$1/$2/$3"))}
         />
         <Input
           label='Fim Vigência'
           value={identificacao.fimVigencia}
-          onChange={(e) => handleChange('fimVigencia', e.target.value)}
+          onChange={(e) => handleChange('fimVigencia', e.target.value?.replace(/\D/g, '').replace(/(\d{1,2})(\d{1,2})(\d{1,4})/, "$1/$2/$3"))}
         />
       </FormGroup>
 
