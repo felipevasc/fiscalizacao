@@ -49,9 +49,9 @@ const Timeline: React.FC<TimelineProps> = ({ cronograma }) => {
           backgroundColor: 'rgba(211, 47, 47, 0.05)',
           border: '1px solid rgba(211, 47, 47, 0.3)',
           borderRadius: '4px',
+          textAlign: 'center'
         }}>
-        Datas de início ou fim do projeto são inválidas ou estão ausentes.
-        Verifique o cronograma.
+        Data inválida
       </Typography>
     );
   }

@@ -136,83 +136,73 @@ const Cadastrar: React.FC<PropsCadastrar> = ({ onSubmit, osEditar }) => {
   };
 
   return (
-    <Card
-      title={osEditar ? 'Editar Ordem de Serviço' : 'Cadastrar nova OS'}
-      subtitle='Informe os campos necessários'>
-      <Wizard
-        passos={[
-          {
-            titulo: 'Identificação',
-            conteudo: (
-              <Identificacao
-                options={OPTIONS}
-                identificacao={identificacao}
-                onChange={setIdentificacao}
+    <Wizard
+      passos={[
+        {
+          titulo: 'Identificação',
+          conteudo: (
+            <Identificacao
+              options={OPTIONS}
+              identificacao={identificacao}
+              onChange={setIdentificacao}
+            />
+          ),
+        },
+        {
+          titulo: 'Especificações',
+          conteudo: (
+            <>
+              <Itens itens={itens} onChange={setItens} />
+              <hr />
+              <Textarea
+                label='Instruções/Especificações complementares'
+                value={instrucoes}
+                onChange={(e) => setInstrucoes(e.target.value)}
               />
-            ),
-          },
-          {
-            titulo: 'Status da OS',
-            conteudo: (
+              <hr />
               <Select
                 label='Status'
                 options={STATUS_OPTIONS}
                 value={status}
                 onChange={(v) => setStatus(v as StatusOrdemServico)}
               />
-            ),
-          },
-          {
-            titulo: 'Especificações',
-            conteudo: (
-              <>
-                <Itens itens={itens} onChange={setItens} />
-                <hr />
-                <Textarea
-                  label='Instruções/Especificações complementares'
-                  value={instrucoes}
-                  onChange={(e) => setInstrucoes(e.target.value)}
-                />
-              </>
-            ),
-          },
-          {
-            titulo: 'Cronograma',
-            conteudo: (
-              <Cronograma dados={cronograma} onChange={setCronograma} />
-            ),
-          },
-          {
-            titulo: 'Dimensionamento',
-            conteudo: (
-              <Dimensionamento
-                setComplexidade={setComplexidade}
-                setTipo={setTipo}
-                complexidade={complexidade}
-                tipo={tipo}
-              />
-            ),
-          },
-          {
-            titulo: 'Priorização',
-            conteudo: (
-              <MatrizGUT
-                gravidade={gravidade}
-                setGravidade={setGravidade}
-                setTendencia={setTendencia}
-                tendencia={tendencia}
-                setUrgencia={setUrgencia}
-                urgencia={urgencia}
-              />
-            ),
-          },
-        ]}
-        ativo={passoAtivo}
-        alterar={(i) => setPassoAtivo(i)}
-        cancelar={() => (window.location.href = '/os')}
-        concluir={() => handleSubmit()}
-      />
-    </Card>
+            </>
+          ),
+        },
+        {
+          titulo: 'Cronograma',
+          conteudo: <Cronograma dados={cronograma} onChange={setCronograma} />,
+        },
+        {
+          titulo: 'Dimensionamento',
+          conteudo: (
+            <Dimensionamento
+              setComplexidade={setComplexidade}
+              setTipo={setTipo}
+              complexidade={complexidade}
+              tipo={tipo}
+            />
+          ),
+        },
+        {
+          titulo: 'Priorização',
+          conteudo: (
+            <MatrizGUT
+              gravidade={gravidade}
+              setGravidade={setGravidade}
+              setTendencia={setTendencia}
+              tendencia={tendencia}
+              setUrgencia={setUrgencia}
+              urgencia={urgencia}
+            />
+          ),
+        },
+      ]}
+      ativo={passoAtivo}
+      alterar={(i) => setPassoAtivo(i)}
+      cancelar={() => (window.location.href = '/os')}
+      concluir={() => handleSubmit()}
+    />
   );
 };
 

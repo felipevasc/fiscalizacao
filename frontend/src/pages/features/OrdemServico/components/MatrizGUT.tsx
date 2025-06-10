@@ -54,12 +54,8 @@ const MatrizGUT: React.FC<MatrizGUTProps> = ({
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant='h5' gutterBottom>
-        Prioridade - Matriz GUT
-      </Typography>
-
       {/* Gravidade */}
-      <Paper variant='outlined' sx={{ mb: 2, p: 2 }}>
+      <Paper variant='outlined' sx={{ mb: 1, p: 1 }}>
         <Typography variant='subtitle1' gutterBottom>
           1) Qual o impacto se não resolver?
         </Typography>

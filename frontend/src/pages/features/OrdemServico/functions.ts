@@ -68,3 +68,11 @@ export const calcularPrazo = (ordemServico: OrdemServico) => {
     return 22;
   }
 };
+
+export const calcularTipo = (ordem: OrdemServico) => {
+  return Number(ordem.itens?.[0]?.item ?? '0') === 1
+    ? 'users'
+    : Number(ordem.itens?.[0]?.item ?? '0') === 3
+    ? 'horas'
+    : 'UDP';
+};

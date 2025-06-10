@@ -6,4 +6,15 @@
   .br-wizard[vertical] .wizard-progress:after {
     display: none !important;
   }
+  .br-wizard .wizard-panel-content {
+    max-height: calc(100% - 185px);
+  }
+}
+
+.br-wizard .wizard-panel-content {
+  min-height: calc(100% - 185px);
+}
+
+.wizard-sample-2 {
+  height: 100%;
 }

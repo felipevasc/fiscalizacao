@@ -23,18 +23,18 @@ const Header: React.FC<HeaderProps> = ({
       features={[
         {
           icon: 'chart-bar',
-          label: 'Funcionalidade 1',
-          onClick: function Dc() {},
+          label: 'Acompanhar OS',
+          onClick: () => (window.location.href = '/os/acompanhamento'),
         },
         {
           icon: 'file-contract',
-          label: 'Funcionalidade 2',
-          onClick: function Dc() {},
+          label: 'Gerenciar OS',
+          onClick: () => (window.location.href = '/os'),
         },
         {
           icon: 'clipboard-list',
-          label: 'Funcionalidade 3',
-          onClick: function Dc() {},
+          label: 'Indicadores',
+          onClick: () => (window.location.href = '/indicadores'),
         },
         {
           //icone para resetar
