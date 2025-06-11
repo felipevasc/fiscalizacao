@@ -28,11 +28,16 @@ interface MonthlyKPIChartProps {
 
 const CustomTooltipContent: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
+    const dataName = payload[0].name || '';
+    const value = payload[0].value;
+    // Ensure value is a number before calling toFixed
+    const displayValue = typeof value === 'number' ? value.toFixed(dataName.toLowerCase().includes("score") ? 2 : 0) : 'N/A';
+
     return (
-      <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', padding: '10px', border: '1px solid #ccc' }}>
-        <p><strong>Mês:</strong> {label}</p>
-        <p style={{ color: payload[0].color }}>
-          <strong>{payload[0].name}:</strong> {payload[0].value?.toFixed(payload[0].name?.toLowerCase().includes("score") ? 2 : 0) ?? 'N/A'}
+      <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '10px', border: '1px solid #ccc', borderRadius: '4px', boxShadow: '2px 2px 5px rgba(0,0,0,0.1)' }}>
+        <p style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>Mês: {label}</p>
+        <p style={{ margin: '4px 0 0 0', color: payload[0].color }}>
+          <strong>{dataName}:</strong> {displayValue}
         </p>
       </div>
     );
@@ -78,10 +83,10 @@ const MonthlyKPIChart: React.FC<MonthlyKPIChartProps> = ({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="mes" />
-              <YAxis unit={yAxisUnit} domain={['auto', 'auto']} />
+              <XAxis dataKey="mes" tick={{ fontSize: 10 }} />
+              <YAxis unit={yAxisUnit} domain={['auto', 'auto']} tick={{ fontSize: 10 }} />
               <Tooltip content={<CustomTooltipContent />} />
-              <Legend />
+              <Legend wrapperStyle={{ fontSize: '12px' }} />
               <Line
                 type="monotone"
                 dataKey="value"
