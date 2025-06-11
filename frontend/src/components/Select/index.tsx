@@ -12,6 +12,7 @@ type SelectProps = {
   placeholder?: string;
   onChange?: (value: string) => void;
   value?: string;
+  disabled?: boolean;
 };
 
 const Select: React.FC<SelectProps> = ({
@@ -19,7 +20,8 @@ const Select: React.FC<SelectProps> = ({
   label,
   onChange,
   placeholder,
-  value
+  value,
+  disabled = false,
 }) => {
   const optionsUsadas = useMemo(
     () =>
@@ -38,6 +40,7 @@ const Select: React.FC<SelectProps> = ({
       onChange={onChange}
       placeholder={placeholder}
       value={value}
+      disabled={disabled}
     />
   );
 };
