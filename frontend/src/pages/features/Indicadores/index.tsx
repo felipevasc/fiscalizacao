@@ -24,8 +24,13 @@ import {
 import MatrizGUTChart from './MatrizGUTChart';
 import ImpactoEsforcoChart from './ImpactoEsforcoChart';
 import MonthlyKPIChart from './MonthlyKPIChart'; // Import the new MonthlyKPIChart
+import ContractExecutionChart from './ContractExecutionChart'; // Import the new chart
+import TotalValueChart from './TotalValueChart'; // Import the TotalValueChart
+import AccumulatedProgressChart from './AccumulatedProgressChart'; // Import the AccumulatedProgressChart
+import DashboardFrames from './DashboardFrames'; // Import DashboardFrames
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
 import { carregarOrdensDoStorage } from '../OrdemServico/Acompanhamento';
+import { processDataForCharts, type ProcessedData } from './dataProcessing';
 
 // Estrutura de OS, estenda conforme necessidade
 
@@ -59,6 +64,7 @@ export default function Indicadores() {
   const [forecastAvgGutScore, setForecastAvgGutScore] = useState<number | undefined>(undefined);
   const [forecastNewOSCount, setForecastNewOSCount] = useState<number | undefined>(undefined);
   const [forecastCompletedOSCount, setForecastCompletedOSCount] = useState<number | undefined>(undefined);
+  const [processedChartData, setProcessedChartData] = useState<ProcessedData | null>(null);
 
 
   // Carrega OS do localStorage
@@ -194,6 +200,10 @@ export default function Indicadores() {
 
   // Prepara dados mensais para linha de % on-time
   useEffect(() => {
+    // Call processDataForCharts to get all processed chart data
+    const chartData = processDataForCharts(osList);
+    setProcessedChartData(chartData);
+
     const mapMes: Record<string, { total: number; onTime: number }> = {};
     osList.forEach((os) => {
       const d = os.dataConclusao || os.identificacao.dataEmissao || '';
@@ -300,56 +310,11 @@ export default function Indicadores() {
     }
   }, [osList]);
 
-  // Prepare data for new monthly charts
-  const monthlyAvgGutScoreData = monthlyKPIEvolutionData.map(item => ({
-    mes: item.mes,
-    value: item.avgGutScore,
-  }));
-  const monthlyNewOSData2 = monthlyKPIEvolutionData.map(item => ({
-    mes: item.mes,
-    value: item.newOSCount,
-  }));
-  const monthlyCompletedOSData2 = monthlyKPIEvolutionData.map(item => ({
-    mes: item.mes,
-    value: item.completedOSCount,
-  }));
-
-  const monthlyNewOSData = useMemo(() => {
-    //realizar reduce para agrupar por mês
-    return carregarOrdensDoStorage()?.filter(o => ['Não Iniciada', 'Priorizada', 'Em Execução'].includes(o.status)).map(ordem => {
-      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
-      return {
-        mes,
-        value: ordem.gutScore,
-      };
-    }
-    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes)?.length })).filter((e, i, arr) => i === arr.findIndex((a) => a.mes === e.mes)) || [];
-  }, [])
-
-  const monthlyCompletedOSData = useMemo(() => {
-    //realizar reduce para agrupar por mês
-    return carregarOrdensDoStorage()?.filter(o => !['Não Iniciada', 'Priorizada', 'Em Execução'].includes(o.status)).map(ordem => {
-      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
-      return {
-        mes,
-        value: ordem.gutScore,
-      };
-    }
-    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes)?.length })).filter((e, i, arr) => i === arr.findIndex((a) => a.mes === e.mes)) || [];
-  }, [])
-
-
-  const acumuladoEntregue = useMemo(() => {
-    //realizar reduce para agrupar por mês
-    return carregarOrdensDoStorage()?.map(ordem => {
-      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
-      return {
-        mes,
-        value: ordem.itens.reduce((acc, item) => acc + (item.valorTotal || 0), 0),
-      };
-    }
-    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes).reduce((acc, item) => acc + (item.value || 0), 0) })) || [];
-  }, [])
+  // Data for charts is now derived from processedChartData state
+  const monthlyAvgGutScoreData = processedChartData?.monthlyAvgGutScoreData || [];
+  const monthlyNewOSData = processedChartData?.monthlyNewOSData || [];
+  const monthlyCompletedOSData = processedChartData?.monthlyCompletedOSData || [];
+  const acumuladoEntregue = processedChartData?.acumuladoEntregue || [];
 
   return (
     <Box
@@ -364,6 +329,41 @@ export default function Indicadores() {
       <Typography variant='h4' sx={{ mb: 3 }}>
         Dashboard de Indicadores Contratuais
       </Typography>
+
+      {/* Dashboard Frames - General Contract Summary */}
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid item xs={12}>
+          <DashboardFrames data={processedChartData?.dashboardFrames || null} />
+        </Grid>
+      </Grid>
+
+      {/* Top Row Charts - Monthly Execution and Total Value */}
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid item xs={12} md={6}> {/* Contract Execution Chart */}
+          <ContractExecutionChart data={processedChartData?.monthlyExecution || []} />
+        </Grid>
+        <Grid item xs={12} md={6}> {/* Total Value Chart */}
+          <TotalValueChart data={processedChartData?.monthlyTotalValue || []} />
+        </Grid>
+      </Grid>
+      {/* New Row for Accumulated Progress Charts */}
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid item xs={12} md={6}>
+          <AccumulatedProgressChart
+            data={processedChartData?.accumulatedQuantity || null}
+            valueType="quantity"
+            // Title will use default from component
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <AccumulatedProgressChart
+            data={processedChartData?.accumulatedValue || null}
+            title="Progresso Acumulado por Item (Valor)"
+            valueType="value"
+          />
+        </Grid>
+      </Grid>
+      <Divider sx={{ my: 3 }} /> {/* Added Divider */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', justifyContent: 'space-around' }}>
         <Grid style={{ width: '40%' }}>
           <MatrizGUTChart osList={osList} />
@@ -595,11 +595,6 @@ export default function Indicadores() {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-
-        {/* Row for New Monthly Charts */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-
         </Grid>
 
         {/* Impact x Effort Analysis Section */}
