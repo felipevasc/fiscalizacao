@@ -1,0 +1,9 @@
+.br-table table {
+  border: 1px solid #ccc;
+  width: 100%; /* Ensure table takes full width */
+}
+.br-table th, .br-table td {
+  border: 1px solid #eee;
+  padding: 8px;
+  text-align: left;
+}
