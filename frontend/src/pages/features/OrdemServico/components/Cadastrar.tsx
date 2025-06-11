@@ -20,7 +20,6 @@ import Wizard from '../../../../components/Wizard';
 import Requisitante from './Requisitante';
 
 const OPTIONS: OptionProps[] = [
-  
   {
     label:
       'MDIC - Ministério do Desenvolvimento, Indústria, Comércio e Serviços',
@@ -214,10 +213,19 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
       passos.push({
         titulo: 'Identificação',
         conteudo: (
-          <Identificacao
-            identificacao={identificacao}
-            onChange={setIdentificacao}
-          />
+          <>
+            <Identificacao
+              identificacao={identificacao}
+              onChange={setIdentificacao}
+            />
+            <Select
+              label='Status'
+              options={osEditar?.id ? STATUS_OPTIONS : ['Não Iniciada']}
+              value={status}
+              onChange={(v) => setStatus(v as StatusOrdemServico)}
+              disabled={true}
+            />
+          </>
         ),
       });
       passos.push({
@@ -230,13 +238,6 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
               label='Instruções/Especificações complementares'
               value={instrucoes}
               onChange={(e) => setInstrucoes(e.target.value)}
-            />
-            <hr />
-            <Select
-              label='Status'
-              options={STATUS_OPTIONS}
-              value={status}
-              onChange={(v) => setStatus(v as StatusOrdemServico)}
             />
           </>
         ),
