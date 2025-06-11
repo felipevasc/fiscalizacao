@@ -6,17 +6,16 @@ import {
   processDataForChart3,
   processDataForChart4,
   processDataForIndicatorFrames,
-  OS,
-  Chart1Data,
-  Chart2Data,
-  Chart3DataItem,
-  Chart4DataItem,
-  IndicatorData,
-  Chart1Data as ProcessedChart1Data, // Rename to avoid conflict if Nivo has Chart1Data
-  Chart3DataItem, // Ensure Chart3DataItem is imported for processedChart3Data typing
+  type OS,
+  type Chart1Data,
+  type Chart2Data,
+  type Chart4DataItem,
+  type IndicatorData,
+  type Chart1Data as ProcessedChart1Data, // Rename to avoid conflict if Nivo has Chart1Data
+  type Chart3DataItem, // Ensure Chart3DataItem is imported for processedChart3Data typing
 } from '../../utils/dataProcessing';
 import './DashboardPage.css';
-import { ResponsiveLine, Serie } from '@nivo/line';
+import { ResponsiveLine,  type Serie } from '@nivo/line';
 import { ResponsiveBar } from '@nivo/bar'; // Import ResponsiveBar
 
 const DashboardPage: React.FC = () => {
@@ -98,6 +97,12 @@ const DashboardPage: React.FC = () => {
       _percentageConsumed: item.percentageConsumed, // For tooltip
     }));
   }, [chart4Data]);
+
+  // Count of OS on time
+  const onTimeCount = osList.filter((os) => {
+    if (!os.dataConclusao || !os.cronograma.data_fim) return false;
+    return new Date(os.dataConclusao) <= new Date(os.cronograma.data_fim); // Corrigido: comparar com data_fim
+  }).length;
 
 
   return (
@@ -402,3 +407,116 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+
+// Correção - adicionar função helper
+const parseDate = (dateStr: string) => {
+  if (!dateStr) return null;
+  // Converte DD/MM/YYYY para YYYY-MM-DD
+  return new Date(dateStr.split('/').reverse().join('-'));
+};
+
+// Correção para validação de GUT Score
+const calculateGutScore = (os: OrdemServicoIndicadores): number | null => {
+  const { gravidade, urgencia, tendencia } = os;
+  if (!gravidade || !urgencia || !tendencia) return null;
+  
+  const g = Number(gravidade);
+  const u = Number(urgencia);
+  const t = Number(tendencia);
+  
+  if (isNaN(g) || isNaN(u) || isNaN(t)) return null;
+  if (g < 1 || g > 5 || u < 1 || u > 5 || t < 1 || t > 5) return null;
+  
+  return g * u * t;
+};
+
+// Função helper para cálculo seguro de médias
+const calculateAverage = (values: number[]): number => {
+  const validValues = values.filter(v => typeof v === 'number' && !isNaN(v));
+  return validValues.length > 0 
+    ? validValues.reduce((sum, val) => sum + val, 0) / validValues.length 
+    : 0;
+};
+
+// Correção no agrupamento mensal
+const processMonthlyData = (osList: OrdemServicoIndicadores[]) => {
+  const monthlyData: Record<string, {
+    sumGutScore: number;
+    countGutOs: number;
+    newOS: number;
+    completedOS: number;
+    totalOS: number;
+    onTimeOS: number;
+  }> = {};
+
+  osList.forEach(os => {
+    const emissaoDate = parseDate(os.identificacao.dataEmissao);
+    if (!emissaoDate) return;
+
+    const monthKey = `${emissaoDate.getFullYear()}/${String(emissaoDate.getMonth() + 1).padStart(2, '0')}`;
+    
+    if (!monthlyData[monthKey]) {
+      monthlyData[monthKey] = {
+        sumGutScore: 0,
+        countGutOs: 0,
+        newOS: 0,
+        completedOS: 0,
+        totalOS: 0,
+        onTimeOS: 0
+      };
+    }
+
+    monthlyData[monthKey].totalOS++;
+    monthlyData[monthKey].newOS++;
+
+    const gutScore = calculateGutScore(os);
+    if (gutScore !== null) {
+      monthlyData[monthKey].sumGutScore += gutScore;
+      monthlyData[monthKey].countGutOs++;
+    }
+
+    if (os.dataConclusao) {
+      monthlyData[monthKey].completedOS++;
+      if (parseDate(os.dataConclusao)! <= parseDate(os.cronograma.data_fim)!) {
+        monthlyData[monthKey].onTimeOS++;
+      }
+    }
+  });
+
+  return monthlyData;
+};
+
+// Nova função para cálculo de previsão
+const calculateForecast = (monthlyData: MonthlyKPIEvolution[]): {
+  avgGutScore?: number;
+  newOSCount?: number;
+  completedOSCount?: number;
+} => {
+  if (monthlyData.length === 0) return {};
+
+  // Usar apenas os últimos 3 meses para previsão
+  const last3Months = monthlyData.slice(-3);
+  
+  const calculateAverage = (key: keyof MonthlyKPIEvolution) => {
+    const values = last3Months
+      .map(m => m[key])
+      .filter((v): v is number => v !== undefined);
+    return values.length > 0 ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) : undefined;
+  };
+
+  return {
+    avgGutScore: calculateAverage('avgGutScore'),
+    newOSCount: calculateAverage('newOSCount'),
+    completedOSCount: calculateAverage('completedOSCount')
+  };
+};
+
+const calculatePercentage = (value: number, total: number): number => {
+  if (total === 0) return 0;
+  return Math.round((value / total) * 100);
+};
+
+const validateNumber = (value: any): number | null => {
+  const num = Number(value);
+  return !isNaN(num) ? num : null;
+};
