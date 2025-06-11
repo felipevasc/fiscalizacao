@@ -31,13 +31,13 @@ const obterTipoTagPorStatus = (
       return 'info';
     case 'Em Execução':
       return 'primary';
-    case 'Em Análise':
+    case 'Priorizada':
       return 'warning';
-    case 'Conclusão':
+    case 'Para pagamento':
       return 'success';
     case 'Cancelada':
-    case 'Verificação':
-    case 'Pendente':
+    case 'Validação':
+    case 'Recebimento Definitivo':
       return 'danger';
     default:
       return undefined;

@@ -580,7 +580,7 @@
         }
       ]
     },
-    "status": "Pendente",
+    "status": "Recebimento Definitivo",
     "gravidade": 1,
     "urgencia": 2,
     "tendencia": 3,
@@ -639,7 +639,7 @@
         }
       ]
     },
-    "status": "Em Análise",
+    "status": "Priorizada",
     "gravidade": 2,
     "urgencia": 3,
     "tendencia": 4,
@@ -757,7 +757,7 @@
         }
       ]
     },
-    "status": "Em Análise",
+    "status": "Priorizada",
     "gravidade": 4,
     "urgencia": 5,
     "tendencia": 1,
@@ -816,7 +816,7 @@
         }
       ]
     },
-    "status": "Conclusão",
+    "status": "Para pagamento",
     "gravidade": 5,
     "urgencia": 1,
     "tendencia": 2,
@@ -875,7 +875,7 @@
         }
       ]
     },
-    "status": "Conclusão",
+    "status": "Para pagamento",
     "gravidade": 1,
     "urgencia": 2,
     "tendencia": 3,
@@ -993,7 +993,7 @@
         }
       ]
     },
-    "status": "Para Aprovação",
+    "status": "Recebimento Provisorio",
     "gravidade": 3,
     "urgencia": 4,
     "tendencia": 5,
@@ -1052,7 +1052,7 @@
         }
       ]
     },
-    "status": "Verificação",
+    "status": "Validação",
     "gravidade": 4,
     "urgencia": 5,
     "tendencia": 1,

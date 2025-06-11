@@ -102,16 +102,16 @@ const CORES_FUNDO_BAIA = [
 
 const TITULOS_STATUS = [
   'Não Iniciada',
-  'Em Análise',
+  'Priorizada',
   'Em Execução',
-  'Para Aprovação',
-  'Verificação',
-  'Pendente',
-  'Conclusão',
+  'Recebimento Provisorio',
+  'Validação',
+  'Recebimento Definitivo',
+  'Para pagamento',
   'Encerrada',
 ];
 
-function carregarOrdensDoStorage(): (OrdemServico & {
+export function carregarOrdensDoStorage(): (OrdemServico & {
   gravidade: number;
   urgencia: number;
   tendencia: number;

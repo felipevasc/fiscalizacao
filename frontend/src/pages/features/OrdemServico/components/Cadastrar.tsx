@@ -81,12 +81,12 @@ const OPTIONS: OptionProps[] = [
 const STATUS_OPTIONS: StatusOrdemServico[] = [
   'Cancelada',
   'Não Iniciada',
-  'Em Análise',
+  'Priorizada',
   'Em Execução',
-  'Para Aprovação',
-  'Verificação',
-  'Pendente',
-  'Conclusão',
+  'Recebimento Provisorio',
+  'Validação',
+  'Recebimento Definitivo',
+  'Para pagamento',
   'Encerrada',
 ];
 
@@ -117,6 +117,9 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
   const [tipo, setTipo] = useState<TipoOrdemServico>(osEditar?.tipo || '');
   const [complexidade, setComplexidade] = useState<ComplexidadeOrdemServico>(
     osEditar?.complexidade || ''
+  );
+  const [roi, setRoi] = useState<number>(
+    osEditar?.roi || 0
   );
   const [passoAtivo, setPassoAtivo] = useState<number>(1);
 
@@ -233,20 +236,6 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
           </>
         ),
       });
-      passos.push({
-        titulo: 'Especificações',
-        conteudo: (
-          <>
-            <Itens itens={itens} onChange={setItens} />
-            <hr />
-            <Textarea
-              label='Instruções/Especificações complementares'
-              value={instrucoes}
-              onChange={(e) => setInstrucoes(e.target.value)}
-            />
-          </>
-        ),
-      });
     }
     passos.push({
       titulo: 'Cronograma',
@@ -260,6 +249,8 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
           setTipo={setTipo}
           complexidade={complexidade}
           tipo={tipo}
+          setRoi={setRoi}
+          roi={roi}
         />
       ),
     });

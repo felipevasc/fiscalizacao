@@ -1,10 +1,10 @@
 export type StatusOrdemServico =
   | 'Não Iniciada'
-  | 'Em Análise'
+  | 'Priorizada'
   | 'Em Execução'
-  | 'Para Aprovação'
-  | 'Verificação'
-  | 'Pendente'
-  | 'Conclusão'
+  | 'Recebimento Provisorio'
+  | 'Validação'
+  | 'Recebimento Definitivo'
+  | 'Para pagamento'
   | 'Encerrada'
   | 'Cancelada';

@@ -2,6 +2,7 @@ import React from 'react';
 import type { TipoOrdemServico } from '../types/TipoOrdemServico';
 import type { ComplexidadeOrdemServico } from '../types/ComplexidadeOrdemServico';
 import { BrButton } from '@govbr-ds/react-components';
+import { Input } from '../../../../components';
 
 const OPCOES_TIPO: { valor: TipoOrdemServico; rotulo: string }[] = [
   { valor: 'Desenho', rotulo: 'Desenho' },
@@ -23,6 +24,8 @@ type PropsDimensionamento = {
   complexidade?: ComplexidadeOrdemServico;
   setTipo: (valor: TipoOrdemServico) => void;
   setComplexidade: (valor: ComplexidadeOrdemServico) => void;
+  setRoi?: (valor: number) => void;
+  roi?: number;
 };
 
 type PropsBotaoOpcao<T extends string> = {
@@ -88,6 +91,8 @@ const Dimensionamento: React.FC<PropsDimensionamento> = ({
   setTipo: definirTipo,
   complexidade,
   tipo,
+  setRoi,
+  roi
 }) => {
   const lidarComSelecaoTipo = (tipoSelecionado: TipoOrdemServico) => {
     if (tipo === tipoSelecionado) {
@@ -116,7 +121,7 @@ const Dimensionamento: React.FC<PropsDimensionamento> = ({
           <legend
             id='legenda-tipo'
             className='block text-base font-medium text-gray-600 mb-2'>
-            1. Tipo da Ordem de Serviço
+            Tipo da Ordem de Serviço
           </legend>
           <div
             className='flex flex-wrap gap-1'
@@ -140,7 +145,7 @@ const Dimensionamento: React.FC<PropsDimensionamento> = ({
             className={`block text-base font-medium text-gray-600 mb-2 transition-opacity duration-300 ${
               !tipo ? 'opacity-50 cursor-default' : 'opacity-100'
             }`}>
-            2. Complexidade da Ordem de Serviço
+            Complexidade da Ordem de Serviço
           </legend>
           <div
             className='flex flex-wrap gap-1'
@@ -157,6 +162,26 @@ const Dimensionamento: React.FC<PropsDimensionamento> = ({
               />
             ))}
           </div>
+          {!tipo && (
+            <p className='text-xs text-gray-500 mt-1 italic' role='status'>
+              Selecione um Tipo para habilitar as opções de Complexidade.
+            </p>
+          )}
+        </fieldset>
+
+        <fieldset className='space-y-3'>
+          <legend
+            id='legenda-complexidade'
+            className={`block text-base font-medium text-gray-600 mb-2 transition-opacity duration-300 ${
+              !tipo ? 'opacity-50 cursor-default' : 'opacity-100'
+            }`}>
+            Retorno previsto
+          </legend>
+          <Input 
+            value={roi?.toString() ?? ''}
+            onChange={(e) => setRoi && setRoi(parseFloat(e.target.value))}
+            type='number'
+          />
           {!tipo && (
             <p className='text-xs text-gray-500 mt-1 italic' role='status'>
               Selecione um Tipo para habilitar as opções de Complexidade.

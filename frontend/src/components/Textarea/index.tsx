@@ -6,6 +6,7 @@ type TextareaProps = {
   placeholder?: string;
   onChange?: (value: ChangeEvent<HTMLTextAreaElement>) => void;
   value?: string;
+  style?: React.CSSProperties;
 };
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -13,6 +14,7 @@ const Textarea: React.FC<TextareaProps> = ({
   onChange,
   placeholder,
   value,
+  style
 }) => {
   return (
     <BrTextarea

@@ -1,5 +1,5 @@
 // frontend/src/pages/features/Indicadores/MonthlyKPIChart.tsx
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -12,6 +12,7 @@ import {
   type TooltipProps,
 } from 'recharts';
 import { Box, Typography, Card, CardContent } from '@mui/material';
+import { carregarOrdensDoStorage } from '../OrdemServico/Acompanhamento';
 
 interface MonthlyChartDataPoint {
   mes: string;
@@ -56,7 +57,8 @@ const MonthlyKPIChart: React.FC<MonthlyKPIChartProps> = ({
   // Filter out data points where value is undefined for cleaner charting if many leading/trailing undefineds.
   // Recharts can handle sporadic undefined values by creating breaks in the line.
   // However, if all values are undefined, or too many, it might be better to show a message.
-  const hasData = data.some(d => d.value !== undefined);
+  console.log(data)
+  const hasData = data?.some(d => d.value !== undefined);
 
   if (!hasData) {
     return (

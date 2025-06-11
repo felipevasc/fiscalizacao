@@ -20,6 +20,7 @@ export interface OrdemServico {
   complexidade?: ComplexidadeOrdemServico;
   udp?: number;
   prazoDiasUteis?: number;
+  roi?: number;
 }
 
 export interface OrdemServicoIndicadores extends OrdemServico {

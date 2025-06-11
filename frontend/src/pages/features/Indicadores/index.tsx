@@ -1,5 +1,5 @@
 // src/pages/Indicadores.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Grid,
@@ -8,6 +8,8 @@ import {
   CardContent,
   LinearProgress,
   Divider,
+  type SxProps,
+  type Theme,
 } from '@mui/material';
 import {
   ResponsiveContainer,
@@ -19,11 +21,11 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { SxProps, Theme } from '@mui/material/styles';
 import MatrizGUTChart from './MatrizGUTChart';
 import ImpactoEsforcoChart from './ImpactoEsforcoChart';
 import MonthlyKPIChart from './MonthlyKPIChart'; // Import the new MonthlyKPIChart
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
+import { carregarOrdensDoStorage } from '../OrdemServico/Acompanhamento';
 
 // Estrutura de OS, estenda conforme necessidade
 
@@ -86,8 +88,8 @@ export default function Indicadores() {
     .filter((v) => v !== undefined) as number[];
   const avgAvailability = availabilityVals.length
     ? Math.round(
-        availabilityVals.reduce((a, b) => a + b, 0) / availabilityVals.length
-      )
+      availabilityVals.reduce((a, b) => a + b, 0) / availabilityVals.length
+    )
     : 0;
 
   // ISA – Satisfação média (somente OS de capacitação)
@@ -160,7 +162,7 @@ export default function Indicadores() {
     // UDP values
     if (os.udp !== undefined && os.udp !== null) {
       const udp = Number(os.udp);
-      if(!isNaN(udp)) {
+      if (!isNaN(udp)) {
         udpValues.push(udp);
       }
     }
@@ -168,7 +170,7 @@ export default function Indicadores() {
     // Prazo Dias Uteis values
     if (os.prazoDiasUteis !== undefined && os.prazoDiasUteis !== null) {
       const prazo = Number(os.prazoDiasUteis);
-      if(!isNaN(prazo)) {
+      if (!isNaN(prazo)) {
         prazoDiasUteisValues.push(prazo);
       }
     }
@@ -194,12 +196,9 @@ export default function Indicadores() {
   useEffect(() => {
     const mapMes: Record<string, { total: number; onTime: number }> = {};
     osList.forEach((os) => {
-      const d = os.cronograma.data_fim || os.dataConclusao || '';
+      const d = os.dataConclusao || os.identificacao.dataEmissao || '';
       if (!d) return;
-      const dt = new Date(d);
-      const key = `${dt.getFullYear()}/${(dt.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}`;
+      const key = new Date(d.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
       if (!mapMes[key]) mapMes[key] = { total: 0, onTime: 0 };
       mapMes[key].total++;
       if (
@@ -253,12 +252,12 @@ export default function Indicadores() {
 
       // Processamento para OS Concluídas
       if (os.dataConclusao) {
-         try {
+        try {
           const conclusaoDate = new Date(os.dataConclusao);
           const key = `${conclusaoDate.getFullYear()}/${(conclusaoDate.getMonth() + 1).toString().padStart(2, '0')}`;
 
           if (!monthlyEvolution[key]) {
-             // Initialize if not already done by new OS processing
+            // Initialize if not already done by new OS processing
             monthlyEvolution[key] = { sumGutScore: 0, countGutOs: 0, newOS: 0, completedOS: 0 };
           }
           monthlyEvolution[key].completedOS++;
@@ -306,14 +305,51 @@ export default function Indicadores() {
     mes: item.mes,
     value: item.avgGutScore,
   }));
-  const monthlyNewOSData = monthlyKPIEvolutionData.map(item => ({
+  const monthlyNewOSData2 = monthlyKPIEvolutionData.map(item => ({
     mes: item.mes,
     value: item.newOSCount,
   }));
-  const monthlyCompletedOSData = monthlyKPIEvolutionData.map(item => ({
+  const monthlyCompletedOSData2 = monthlyKPIEvolutionData.map(item => ({
     mes: item.mes,
     value: item.completedOSCount,
   }));
+
+  const monthlyNewOSData = useMemo(() => {
+    //realizar reduce para agrupar por mês
+    return carregarOrdensDoStorage()?.filter(o => ['Não Iniciada', 'Priorizada', 'Em Execução'].includes(o.status)).map(ordem => {
+      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
+      return {
+        mes,
+        value: ordem.gutScore,
+      };
+    }
+    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes)?.length })).filter((e, i, arr) => i === arr.findIndex((a) => a.mes === e.mes)) || [];
+  }, [])
+
+  const monthlyCompletedOSData = useMemo(() => {
+    //realizar reduce para agrupar por mês
+    return carregarOrdensDoStorage()?.filter(o => !['Não Iniciada', 'Priorizada', 'Em Execução'].includes(o.status)).map(ordem => {
+      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
+      return {
+        mes,
+        value: ordem.gutScore,
+      };
+    }
+    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes)?.length })).filter((e, i, arr) => i === arr.findIndex((a) => a.mes === e.mes)) || [];
+  }, [])
+
+
+  const acumuladoEntregue = useMemo(() => {
+    //realizar reduce para agrupar por mês
+    return carregarOrdensDoStorage()?.map(ordem => {
+      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
+      return {
+        mes,
+        value: ordem.itens.reduce((acc, item) => acc + (item.valorTotal || 0), 0),
+      };
+    }
+    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes).reduce((acc, item) => acc + (item.value || 0), 0) })) || [];
+  }, [])
 
   return (
     <Box
@@ -328,11 +364,51 @@ export default function Indicadores() {
       <Typography variant='h4' sx={{ mb: 3 }}>
         Dashboard de Indicadores Contratuais
       </Typography>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', justifyContent: 'space-around' }}>
+        <Grid style={{ width: '40%' }}>
+          <MatrizGUTChart osList={osList} />
+        </Grid>
+        <Grid style={{ width: '40%' }}>
+          <MonthlyKPIChart
+            data={monthlyAvgGutScoreData}
+            title="Evolução Mensal - Avg. GUT Score"
+            lineName="Avg. GUT Score"
+            lineColor="#8884d8"
+            yAxisUnit=""
+          />
+        </Grid>
+        <Grid style={{ width: '40%' }}>
+          <MonthlyKPIChart
+            data={monthlyNewOSData}
+            title="Evolução Mensal - Novas OS Criadas"
+            lineName="Nº Novas OS"
+            lineColor="#82ca9d"
+            yAxisUnit=""
+          />
+        </Grid>
+        <Grid style={{ width: '40%' }}>
+          <MonthlyKPIChart
+            data={monthlyCompletedOSData}
+            title="Evolução Mensal - OS Concluídas"
+            lineName="Nº OS Concluídas"
+            lineColor="#ffc658"
+            yAxisUnit=""
+          />
+        </Grid>
+        <Grid style={{ width: '40%' }}>
+          <MonthlyKPIChart
+            data={acumuladoEntregue}
+            title="Entregue"
+            lineName="Nº OS Concluídas"
+            lineColor="#ffc658"
+            yAxisUnit=""
+          />
+        </Grid>
+
+      </div>
       <Divider sx={{ mb: 3 }} />
-      <Box sx={{ flexGrow: 1, overflowY: 'auto', width: '100%' }}>
-        {/* Row 1: Overview KPIs */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Box sx={{ flexGrow: 4, overflowY: 'auto', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid>
           <Card sx={commonCardSx}>
             <CardContent>
               <Typography variant='subtitle1' color="textSecondary">Total de OS</Typography>
@@ -340,7 +416,7 @@ export default function Indicadores() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid>
           <Card sx={commonCardSx}>
             <CardContent>
               <Typography variant='subtitle1' color="textSecondary">% OS no Prazo (IAP)</Typography>
@@ -349,7 +425,7 @@ export default function Indicadores() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid>
           <Card sx={commonCardSx}>
             <CardContent>
               <Typography variant='subtitle1' color="textSecondary">Disponibilidade Média (IDS)</Typography>
@@ -357,7 +433,7 @@ export default function Indicadores() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid>
           <Card sx={commonCardSx}>
             <CardContent>
               <Typography variant='subtitle1' color="textSecondary">Satisfação Média (ISA)</Typography>
@@ -365,115 +441,114 @@ export default function Indicadores() {
             </CardContent>
           </Card>
         </Grid>
-      </Grid>
 
-      {/* Row 2: Efficiency & Support KPIs */}
-      <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
-        Eficiência & Suporte
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={commonCardSx}>
-            <CardContent>
-              <Typography variant='subtitle1' color="textSecondary">Tempo Médio de Acesso (IDA)</Typography>
-              <Typography variant='h6' component="div" data-testid="avgAcesso-value">{avgAcesso !== undefined ? `${avgAcesso} dias` : '—'}</Typography>
-            </CardContent>
-          </Card>
+        {/* Row 2: Efficiency & Support KPIs */}
+        <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
+          Eficiência & Suporte
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={commonCardSx}>
+              <CardContent>
+                <Typography variant='subtitle1' color="textSecondary">Tempo Médio de Acesso (IDA)</Typography>
+                <Typography variant='h6' component="div" data-testid="avgAcesso-value">{avgAcesso !== undefined ? `${avgAcesso} dias` : '—'}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={commonCardSx}>
+              <CardContent>
+                <Typography variant='subtitle1' color="textSecondary">Tempo Médio de Resposta (IED)</Typography>
+                <Typography variant='h6' component="div" data-testid="avgResposta-value">{avgResposta !== undefined ? `${avgResposta} h` : '—'}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={commonCardSx}>
+              <CardContent>
+                <Typography variant='subtitle1' color="textSecondary">Média UDP</Typography>
+                <Typography variant='h6' component="div" data-testid="udpStatsAvg-value">{udpStats.avg !== undefined ? udpStats.avg.toFixed(2) : '—'}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={commonCardSx}>
+              <CardContent>
+                <Typography variant='subtitle1' color="textSecondary">Média Prazo Dias Úteis</Typography>
+                <Typography variant='h6' component="div" data-testid="prazoDiasUteisStatsAvg-value">{prazoDiasUteisStats.avg !== undefined ? prazoDiasUteisStats.avg.toFixed(0) : '—'}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={commonCardSx}>
-            <CardContent>
-              <Typography variant='subtitle1' color="textSecondary">Tempo Médio de Resposta (IED)</Typography>
-              <Typography variant='h6' component="div" data-testid="avgResposta-value">{avgResposta !== undefined ? `${avgResposta} h` : '—'}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={commonCardSx}>
-            <CardContent>
-              <Typography variant='subtitle1' color="textSecondary">Média UDP</Typography>
-              <Typography variant='h6' component="div" data-testid="udpStatsAvg-value">{udpStats.avg !== undefined ? udpStats.avg.toFixed(2) : '—'}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={commonCardSx}>
-            <CardContent>
-              <Typography variant='subtitle1' color="textSecondary">Média Prazo Dias Úteis</Typography>
-              <Typography variant='h6' component="div" data-testid="prazoDiasUteisStatsAvg-value">{prazoDiasUteisStats.avg !== undefined ? prazoDiasUteisStats.avg.toFixed(0) : '—'}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
 
-      {/* GUT Analysis Section */}
-      <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
-        Análise GUT
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={commonCardSx}>
-            <CardContent>
-              <Typography variant='subtitle1' color="textSecondary">Score GUT Médio</Typography>
-              <Typography variant='h6' component="div" data-testid="avgGutScore-value">{avgGutScore || '—'}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={commonCardSx}>
-            <CardContent data-testid="gutScoreDistribution-value">
-              <Typography variant='subtitle1' color="textSecondary" gutterBottom>Distribuição GUT</Typography>
-              <Typography variant="body2" sx={{ mb: 0.5 }}>Baixo (1-40): {gutScoreDistribution.Low}</Typography>
-              <Typography variant="body2" sx={{ mb: 0.5 }}>Médio (41-80): {gutScoreDistribution.Medium}</Typography>
-              <Typography variant="body2">Alto (81-125): {gutScoreDistribution.High}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}> {/* Adjusted md for potentially larger chart */}
-          <Card sx={commonCardSx}>
-            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-              <Typography variant='subtitle1' color="textSecondary" gutterBottom>
-                Matriz GUT (Gravidade x Urgência)
-              </Typography>
-              <MatrizGUTChart osList={osList} />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+        {/* GUT Analysis Section */}
+        <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
+          Análise GUT
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={commonCardSx}>
+              <CardContent>
+                <Typography variant='subtitle1' color="textSecondary">Score GUT Médio</Typography>
+                <Typography variant='h6' component="div" data-testid="avgGutScore-value">{avgGutScore || '—'}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card sx={commonCardSx}>
+              <CardContent data-testid="gutScoreDistribution-value">
+                <Typography variant='subtitle1' color="textSecondary" gutterBottom>Distribuição GUT</Typography>
+                <Typography variant="body2" sx={{ mb: 0.5 }}>Baixo (1-40): {gutScoreDistribution.Low}</Typography>
+                <Typography variant="body2" sx={{ mb: 0.5 }}>Médio (41-80): {gutScoreDistribution.Medium}</Typography>
+                <Typography variant="body2">Alto (81-125): {gutScoreDistribution.High}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}> {/* Adjusted md for potentially larger chart */}
+            <Card sx={commonCardSx}>
+              <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <Typography variant='subtitle1' color="textSecondary" gutterBottom>
+                  Matriz GUT (Gravidade x Urgência)
+                </Typography>
 
-      {/* OS Characteristics Section */}
-      <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
-        Características das OS
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6}>
-          <Card sx={commonCardSx}>
-            <CardContent data-testid="osByType-values">
-              <Typography variant='subtitle1' color="textSecondary" gutterBottom>OS por Tipo</Typography>
-              {Object.entries(osByType).length > 0 ? Object.entries(osByType).map(([tipo, count]) => (
-                <Typography key={tipo} variant="body2" sx={{ mb: 0.5 }}>{tipo}: {count}</Typography>
-              )) : <Typography variant="body2">N/A</Typography>}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card sx={commonCardSx}>
-            <CardContent data-testid="osByComplexity-values">
-              <Typography variant='subtitle1' color="textSecondary" gutterBottom>OS por Complexidade</Typography>
-              {Object.entries(osByComplexity).length > 0 ? Object.entries(osByComplexity).map(([complexidade, count]) => (
-                <Typography key={complexidade} variant="body2" sx={{ mb: 0.5 }}>{complexidade}: {count}</Typography>
-              )) : <Typography variant="body2">N/A</Typography>}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
 
-      {/* Monthly Evolution & Forecasts Section */}
-      <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
-        Evolução Mensal e Previsões
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-         <Grid item xs={12} md={6}>
+        {/* OS Characteristics Section */}
+        <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
+          Características das OS
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6}>
+            <Card sx={commonCardSx}>
+              <CardContent data-testid="osByType-values">
+                <Typography variant='subtitle1' color="textSecondary" gutterBottom>OS por Tipo</Typography>
+                {Object.entries(osByType).length > 0 ? Object.entries(osByType).map(([tipo, count]) => (
+                  <Typography key={tipo} variant="body2" sx={{ mb: 0.5 }}>{tipo}: {count}</Typography>
+                )) : <Typography variant="body2">N/A</Typography>}
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Card sx={commonCardSx}>
+              <CardContent data-testid="osByComplexity-values">
+                <Typography variant='subtitle1' color="textSecondary" gutterBottom>OS por Complexidade</Typography>
+                {Object.entries(osByComplexity).length > 0 ? Object.entries(osByComplexity).map(([complexidade, count]) => (
+                  <Typography key={complexidade} variant="body2" sx={{ mb: 0.5 }}>{complexidade}: {count}</Typography>
+                )) : <Typography variant="body2">N/A</Typography>}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
+        {/* Monthly Evolution & Forecasts Section */}
+        <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
+          Evolução Mensal e Previsões
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} md={6}>
             <Card sx={commonCardSx}>
               <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', '& .recharts-responsive-container': { flexGrow: 1 } }}>
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>Desempenho Mensal (IAP %)</Typography>
@@ -483,7 +558,6 @@ export default function Indicadores() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="mes" />
                       <YAxis unit="%" tick={{ fontSize: 10 }} />
-                      <Tooltip content={<CustomTooltipContentForIAP />} />
                       <Legend wrapperStyle={{ fontSize: '12px' }} />
                       <Line type="monotone" dataKey="pctOnTime" name="% no Prazo" stroke="#1976d2" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                     </LineChart>
@@ -491,85 +565,59 @@ export default function Indicadores() {
                 </Box>
               </CardContent>
             </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
+          </Grid>
+          <Grid item xs={12} md={6}>
             {/* This Grid item can contain the forecast cards */}
             <Grid container spacing={2}>
-                 <Grid item xs={12} sm={4}>
-                    <Card sx={commonCardSx}>
-                        <CardContent>
-                            <Typography variant='subtitle1' color="textSecondary" align="center">Previsão GUT Médio</Typography>
-                            <Typography variant='h6' align="center" data-testid="forecastAvgGutScore-value">{forecastAvgGutScore !== undefined ? forecastAvgGutScore.toFixed(0) : '—'}</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                     <Card sx={commonCardSx}>
-                        <CardContent>
-                            <Typography variant='subtitle1' color="textSecondary" align="center">Previsão Novas OS</Typography>
-                            <Typography variant='h6' align="center" data-testid="forecastNewOSCount-value">{forecastNewOSCount !== undefined ? forecastNewOSCount.toFixed(0) : '—'}</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                     <Card sx={commonCardSx}>
-                        <CardContent>
-                            <Typography variant='subtitle1' color="textSecondary" align="center">Previsão OS Concluídas</Typography>
-                            <Typography variant='h6' align="center" data-testid="forecastCompletedOSCount-value">{forecastCompletedOSCount !== undefined ? forecastCompletedOSCount.toFixed(0) : '—'}</Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
+              <Grid item xs={12} sm={4}>
+                <Card sx={commonCardSx}>
+                  <CardContent>
+                    <Typography variant='subtitle1' color="textSecondary" align="center">Previsão GUT Médio</Typography>
+                    <Typography variant='h6' align="center" data-testid="forecastAvgGutScore-value">{forecastAvgGutScore !== undefined ? forecastAvgGutScore.toFixed(0) : '—'}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Card sx={commonCardSx}>
+                  <CardContent>
+                    <Typography variant='subtitle1' color="textSecondary" align="center">Previsão Novas OS</Typography>
+                    <Typography variant='h6' align="center" data-testid="forecastNewOSCount-value">{forecastNewOSCount !== undefined ? forecastNewOSCount.toFixed(0) : '—'}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Card sx={commonCardSx}>
+                  <CardContent>
+                    <Typography variant='subtitle1' color="textSecondary" align="center">Previsão OS Concluídas</Typography>
+                    <Typography variant='h6' align="center" data-testid="forecastCompletedOSCount-value">{forecastCompletedOSCount !== undefined ? forecastCompletedOSCount.toFixed(0) : '—'}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
+          </Grid>
         </Grid>
-      </Grid>
 
-      {/* Row for New Monthly Charts */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
-          <MonthlyKPIChart
-            data={monthlyAvgGutScoreData}
-            title="Evolução Mensal - Avg. GUT Score"
-            lineName="Avg. GUT Score"
-            lineColor="#8884d8"
-            yAxisUnit=""
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <MonthlyKPIChart
-            data={monthlyNewOSData}
-            title="Evolução Mensal - Novas OS Criadas"
-            lineName="Nº Novas OS"
-            lineColor="#82ca9d"
-            yAxisUnit=""
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <MonthlyKPIChart
-            data={monthlyCompletedOSData}
-            title="Evolução Mensal - OS Concluídas"
-            lineName="Nº OS Concluídas"
-            lineColor="#ffc658"
-            yAxisUnit=""
-          />
-        </Grid>
-      </Grid>
+        {/* Row for New Monthly Charts */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
 
-      {/* Impact x Effort Analysis Section */}
-      <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
-        Análise Impacto x Esforço
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12}> {/* This chart can take full width */}
-          <Card sx={commonCardSx}>
-            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-              <Typography variant='subtitle1' color="textSecondary" gutterBottom>
-                Matriz Impacto x Esforço (GUT Score x UDP)
-              </Typography>
-              <ImpactoEsforcoChart osList={osList} />
-            </CardContent>
-          </Card>
         </Grid>
-      </Grid>
+
+        {/* Impact x Effort Analysis Section */}
+        <Typography variant='h5' sx={{ mt: 4, mb: 3 }}>
+          Análise Impacto x Esforço
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12}> {/* This chart can take full width */}
+            <Card sx={commonCardSx}>
+              <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <Typography variant='subtitle1' color="textSecondary" gutterBottom>
+                  Matriz Impacto x Esforço (GUT Score x UDP)
+                </Typography>
+                <ImpactoEsforcoChart osList={osList} />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Box> {/* Closing the new scrollable Box */}
     </Box>
   );

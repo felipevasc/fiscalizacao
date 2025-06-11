@@ -11,11 +11,33 @@ import {
 } from '@mui/material';
 import { BrButton } from '@govbr-ds/react-components';
 import type { Item } from '../types/Item';
+import { Select } from '../../../../components';
 
 interface ItensProps {
   itens: Item[];
   onChange: (novosItens: Item[]) => void;
 }
+
+const PARAMETROS = [
+  {
+    id: '1',
+    item: 'Serviços de licenciamento de Suíte BPMS em nuvem com suporte técnico aos usuários',
+    metrica: 'Usuário/Mês',
+    valor: 'R$ 230,00'
+  },
+  {
+    id: '2',
+    item: 'Serviços de modelagem, melhoria, automação e manutenção de processos na suíte licenciada',
+    metrica: 'UDP',
+    valor: 'R$ 1.850,00'
+  },
+  {
+    id: '3',
+    item: 'Serviços de capacitação de usuários na utilização dos processos automatizados e da suíte licenciada',
+    metrica: 'Hora/Aula',
+    valor: 'R$ 412,00'
+  },
+]
 
 const Itens: React.FC<ItensProps> = ({ itens, onChange }) => {
   const [showModal, setShowModal] = useState(false);
@@ -28,6 +50,15 @@ const Itens: React.FC<ItensProps> = ({ itens, onChange }) => {
     quantidade: 0,
     valorTotal: 0,
   });
+
+  const changeSelect = (value: string) => {
+    const parametro = PARAMETROS.find((p) => p.item === value);
+    if (parametro) {
+      let val: string | number = value;
+      handleChange('valorUnitario', parametro.valor);
+      setNovoItem(i => ({...i, item: parametro.id, descricao: parametro.item, metrica: parametro.metrica} as Item));
+    }
+  }
 
   const handleChange = (field: keyof Item, value: string) => {
     let val: string | number = value;
@@ -88,21 +119,10 @@ const Itens: React.FC<ItensProps> = ({ itens, onChange }) => {
         title='Adicionar item'
         primaryAction={{ label: 'Adicionar', action: adicionarItem }}
         onClose={() => setShowModal(false)}>
-        <Input
-          label='Descrição do bem ou serviço'
+        <Select
+          options={PARAMETROS.map(p => p.item)}
           value={novoItem.descricao}
-          onChange={(e) => handleChange('descricao', e.target.value)}
-        />
-        <Input
-          label='Métrica'
-          value={novoItem.metrica}
-          onChange={(e) => handleChange('metrica', e.target.value)}
-        />
-        <Input
-          label='Valor unitário (R$)'
-          type='number'
-          value={novoItem.valorUnitario.toString()}
-          onChange={(e) => handleChange('valorUnitario', e.target.value)}
+          onChange={(e) => changeSelect(e)}
         />
         <Input
           label='Qtde/Vol.'
@@ -111,10 +131,23 @@ const Itens: React.FC<ItensProps> = ({ itens, onChange }) => {
           onChange={(e) => handleChange('quantidade', e.target.value)}
         />
         <Input
+          label='Métrica'
+          value={novoItem.metrica}
+          readonly={true}
+
+        />
+        <Input
+          label='Valor unitário (R$)'
+          type='number'
+          value={novoItem.valorUnitario.toFixed(2)}
+          onChange={(e) => handleChange('valorUnitario', e.target.value)}
+          readonly={true}
+        />
+        <Input
           label='Valor Total (R$)'
           type='number'
           value={novoItem.valorTotal.toFixed(2)}
-          onChange={(e) => handleChange('valorTotal', e.target.value)}
+          readonly={true}
         />
       </Modal>
 

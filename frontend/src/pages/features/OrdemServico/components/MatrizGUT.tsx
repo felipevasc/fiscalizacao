@@ -6,6 +6,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from '@mui/material';
+import { Textarea } from '../../../../components';
 
 // Perguntas e opções para inferir GUT
 const gravidadeOptions = [
@@ -57,65 +58,81 @@ const MatrizGUT: React.FC<MatrizGUTProps> = ({
       {/* Gravidade */}
       <Paper variant='outlined' sx={{ mb: 1, p: 1 }}>
         <Typography variant='subtitle1' gutterBottom>
-          1) Qual o impacto se não resolver?
+          Qual o impacto se não resolver?
         </Typography>
-        <ToggleButtonGroup
-          value={gravidade || null}
-          exclusive
-          onChange={(_, val) => setGravidade(val)}
-          sx={{ flexWrap: 'wrap' }}>
-          {gravidadeOptions.map((opt) => (
-            <ToggleButton
-              key={opt.value}
-              value={opt.value}
-              sx={{ m: 0.5, flex: '1 1 40%' }}>
-              {opt.label}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+          <ToggleButtonGroup
+            value={gravidade || null}
+            exclusive
+            onChange={(_, val) => setGravidade(val)}
+            sx={{ flexWrap: 'wrap' }}>
+            {gravidadeOptions.map((opt) => (
+              <ToggleButton
+                key={opt.value}
+                value={opt.value}
+                sx={{ m: 0.5, flex: '1 1 40%' }}>
+                {opt.label}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+          {gravidade === '5' && (<div className='br-textarea' style={{ width: '100%', margin: '0 auto', height: '100%' }}>
+            <textarea className='br-' placeholder='Justifique' style={{ height: '100%' }} />
+          </div>)}
+        </div>
       </Paper>
 
       {/* Urgência */}
       <Paper variant='outlined' sx={{ mb: 2, p: 2 }}>
         <Typography variant='subtitle1' gutterBottom>
-          2) Quando precisa ser resolvido?
+          Quando precisa ser resolvido?
         </Typography>
-        <ToggleButtonGroup
-          value={urgencia || null}
-          exclusive
-          onChange={(_, val) => setUrgencia(val)}
-          sx={{ flexWrap: 'wrap' }}>
-          {urgenciaOptions.map((opt) => (
-            <ToggleButton
-              key={opt.value}
-              value={opt.value}
-              sx={{ m: 0.5, flex: '1 1 40%' }}>
-              {opt.label}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+          <ToggleButtonGroup
+            value={urgencia || null}
+            exclusive
+            onChange={(_, val) => setUrgencia(val)}
+            sx={{ flexWrap: 'wrap' }}>
+            {urgenciaOptions.map((opt) => (
+              <ToggleButton
+                key={opt.value}
+                value={opt.value}
+                sx={{ m: 0.5, flex: '1 1 40%' }}>
+                {opt.label}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+          {urgencia === '5' && (<div className='br-textarea' style={{ width: '100%', margin: '0 auto', height: '100%' }}>
+            <textarea className='br-' placeholder='Justifique' style={{ height: '100%' }} />
+          </div>)}
+        </div>
       </Paper>
 
       {/* Tendência */}
-      <Paper variant='outlined' sx={{ mb: 2, p: 2 }}>
-        <Typography variant='subtitle1' gutterBottom>
-          3) Como evolui com o tempo?
-        </Typography>
-        <ToggleButtonGroup
-          value={tendencia || null}
-          exclusive
-          onChange={(_, val) => setTendencia(val)}
-          sx={{ flexWrap: 'wrap' }}>
-          {tendenciaOptions.map((opt) => (
-            <ToggleButton
-              key={opt.value}
-              value={opt.value}
-              sx={{ m: 0.5, flex: '1 1 40%' }}>
-              {opt.label}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
-      </Paper>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+        <Paper variant='outlined' sx={{ mb: 2, p: 2 }}>
+          <Typography variant='subtitle1' gutterBottom>
+            Como evolui com o tempo?
+          </Typography>
+          <ToggleButtonGroup
+            value={tendencia || null}
+            exclusive
+            onChange={(_, val) => setTendencia(val)}
+            sx={{ flexWrap: 'wrap' }}>
+            {tendenciaOptions.map((opt) => (
+              <ToggleButton
+                key={opt.value}
+                value={opt.value}
+                sx={{ m: 0.5, flex: '1 1 40%' }}>
+                {opt.label}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </Paper>
+        {tendencia === '5' && (<div className='br-textarea' style={{ width: '100%', margin: '0 auto', height: '100%' }}>
+          <textarea className='br-' placeholder='Justifique' style={{ height: '100%' }} />
+        </div>)}
+
+      </div>
 
       {/* Resultado */}
       {pontuacao !== null && (
