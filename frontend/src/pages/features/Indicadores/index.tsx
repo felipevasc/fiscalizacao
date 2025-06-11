@@ -317,6 +317,8 @@ export default function Indicadores() {
   const acumuladoEntregue = processedChartData?.acumuladoEntregue || [];
 
   return (
+    <>
+    
     <Box
       sx={{
         minHeight: '100vh',
@@ -327,43 +329,30 @@ export default function Indicadores() {
       }}
     >
       <Typography variant='h4' sx={{ mb: 3 }}>
-        Dashboard de Indicadores Contratuais
+        Acompanhamento do Contrato
       </Typography>
-
       {/* Dashboard Frames - General Contract Summary */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12}>
+      <Grid container>
           <DashboardFrames data={processedChartData?.dashboardFrames || null} />
-        </Grid>
       </Grid>
-
+      <hr/>
       {/* Top Row Charts - Monthly Execution and Total Value */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={6}> {/* Contract Execution Chart */}
+      <Grid container spacing={3}>
           <ContractExecutionChart data={processedChartData?.monthlyExecution || []} />
-        </Grid>
-        <Grid item xs={12} md={6}> {/* Total Value Chart */}
+          
           <TotalValueChart data={processedChartData?.monthlyTotalValue || []} />
-        </Grid>
-      </Grid>
-      {/* New Row for Accumulated Progress Charts */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={6}>
           <AccumulatedProgressChart
             data={processedChartData?.accumulatedQuantity || null}
             valueType="quantity"
             // Title will use default from component
           />
-        </Grid>
-        <Grid item xs={12} md={6}>
           <AccumulatedProgressChart
             data={processedChartData?.accumulatedValue || null}
             title="Progresso Acumulado por Item (Valor)"
             valueType="value"
           />
-        </Grid>
       </Grid>
-      <Divider sx={{ my: 3 }} /> {/* Added Divider */}
+      <hr />
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', justifyContent: 'space-around' }}>
         <Grid style={{ width: '40%' }}>
           <MatrizGUTChart osList={osList} />
@@ -406,6 +395,16 @@ export default function Indicadores() {
         </Grid>
 
       </div>
+      
+
+      
+      
+      {/* New Row for Accumulated Progress Charts */}
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+          
+      </Grid>
+      <Divider sx={{ my: 3 }} /> {/* Added Divider */}
+      
       <Divider sx={{ mb: 3 }} />
       <Box sx={{ flexGrow: 4, overflowY: 'auto', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <Grid>
@@ -447,7 +446,7 @@ export default function Indicadores() {
           Eficiência & Suporte
         </Typography>
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent>
                 <Typography variant='subtitle1' color="textSecondary">Tempo Médio de Acesso (IDA)</Typography>
@@ -455,7 +454,7 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent>
                 <Typography variant='subtitle1' color="textSecondary">Tempo Médio de Resposta (IED)</Typography>
@@ -463,7 +462,7 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent>
                 <Typography variant='subtitle1' color="textSecondary">Média UDP</Typography>
@@ -471,7 +470,7 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent>
                 <Typography variant='subtitle1' color="textSecondary">Média Prazo Dias Úteis</Typography>
@@ -486,7 +485,7 @@ export default function Indicadores() {
           Análise GUT
         </Typography>
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent>
                 <Typography variant='subtitle1' color="textSecondary">Score GUT Médio</Typography>
@@ -494,7 +493,7 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent data-testid="gutScoreDistribution-value">
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>Distribuição GUT</Typography>
@@ -504,7 +503,7 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}> {/* Adjusted md for potentially larger chart */}
+          <Grid> {/* Adjusted md for potentially larger chart */}
             <Card sx={commonCardSx}>
               <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>
@@ -521,7 +520,7 @@ export default function Indicadores() {
           Características das OS
         </Typography>
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent data-testid="osByType-values">
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>OS por Tipo</Typography>
@@ -531,7 +530,7 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent data-testid="osByComplexity-values">
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>OS por Complexidade</Typography>
@@ -548,7 +547,7 @@ export default function Indicadores() {
           Evolução Mensal e Previsões
         </Typography>
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} md={6}>
+          <Grid>
             <Card sx={commonCardSx}>
               <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', '& .recharts-responsive-container': { flexGrow: 1 } }}>
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>Desempenho Mensal (IAP %)</Typography>
@@ -566,10 +565,10 @@ export default function Indicadores() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid>
             {/* This Grid item can contain the forecast cards */}
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
+              <Grid>
                 <Card sx={commonCardSx}>
                   <CardContent>
                     <Typography variant='subtitle1' color="textSecondary" align="center">Previsão GUT Médio</Typography>
@@ -577,7 +576,7 @@ export default function Indicadores() {
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid>
                 <Card sx={commonCardSx}>
                   <CardContent>
                     <Typography variant='subtitle1' color="textSecondary" align="center">Previsão Novas OS</Typography>
@@ -585,7 +584,7 @@ export default function Indicadores() {
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid>
                 <Card sx={commonCardSx}>
                   <CardContent>
                     <Typography variant='subtitle1' color="textSecondary" align="center">Previsão OS Concluídas</Typography>
@@ -602,7 +601,7 @@ export default function Indicadores() {
           Análise Impacto x Esforço
         </Typography>
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12}> {/* This chart can take full width */}
+          <Grid> {/* This chart can take full width */}
             <Card sx={commonCardSx}>
               <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Typography variant='subtitle1' color="textSecondary" gutterBottom>
@@ -615,5 +614,6 @@ export default function Indicadores() {
         </Grid>
       </Box> {/* Closing the new scrollable Box */}
     </Box>
+    </>
   );
 }

@@ -1,132 +1,154 @@
-// src/pages/features/Indicadores/DashboardFrames.tsx
-import { Card, CardContent, Typography, Grid, Box, Paper, useTheme, styled } from '@mui/material';
-import type { DashboardFramesData } from './dataProcessing'; // Assuming this interface is defined
+// src/theme.ts
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: { main: '#0054a6', light: '#e8f1f9' },
+    secondary: { main: '#008837' },
+    background: { default: '#f1f1f1', paper: '#ffffff' },
+    text: { primary: '#333333', secondary: '#555555' },
+  },
+  typography: {
+    fontFamily: 'Roboto, "Helvetica Neue", Arial, sans-serif',
+    h5: { fontWeight: 700 },
+    h6: { fontWeight: 600 },
+  },
+  shape: { borderRadius: 8 },
+});
+
+
+// src/DashboardFrames.tsx
+
+import React from 'react';
+import { Card, CardContent, Typography, Box, Paper, useTheme, styled } from '@mui/material';
+// O componente Grid não é mais importado
+
+// Interfaces e Ícones
+export interface DashboardFramesData {
+  totalGeneralValueConsumed: number;
+  overallQuantityPercentage: { item1: number; item2: number; item3: number; };
+  remainingValueByItem: { item1: number; item2: number; item3: number; };
+  remainingQuantityByItem: { item1: number; item2: number; item3: number; };
+}
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import DonutLargeOutlinedIcon from '@mui/icons-material/DonutLargeOutlined';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 
 interface DashboardFramesProps {
   data: DashboardFramesData | null;
   title?: string;
 }
 
+// Componentes Estilizados (sem alterações)
 const FramePaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  height: '100%',
+  padding: theme.spacing(3),
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  // Futuristic/Modern Styling
-  background: `linear-gradient(145deg, ${theme.palette.background.paper}, ${theme.palette.grey[900]})`, // Darker gradient
-  color: theme.palette.common.white, // White text for contrast
-  borderRadius: '10px', // Rounded corners
-  boxShadow: '0 0 15px rgba(0, 255, 255, 0.3)', // Cyan glow effect
-  border: `1px solid ${theme.palette.primary.light}`,
+  justifyContent: 'space-between',
+  height: '100%',
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: '0px 4px 12px rgba(0,0,0,0.05)',
+  border: `1px solid ${theme.palette.grey[200]}`,
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const IconWrapper = styled(Box)(({ theme }) => ({
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  width: 56, height: 56, borderRadius: '50%',
+  marginBottom: theme.spacing(2),
+  backgroundColor: theme.palette.primary.light,
+  color: theme.palette.primary.main,
 }));
 
 const ValueText = styled(Typography)(({ theme }) => ({
-  fontWeight: 'bold',
-  fontSize: '1.5rem', // Larger font for main values
-  color: theme.palette.primary.light, // Bright color for emphasis
-  marginBottom: theme.spacing(0.5),
+  fontWeight: 'bold', fontSize: '2rem', color: theme.palette.text.primary,
 }));
 
 const LabelText = styled(Typography)(({ theme }) => ({
-  fontSize: '0.8rem',
-  color: theme.palette.grey[400], // Lighter grey for labels
-  textTransform: 'uppercase',
+  fontSize: '0.9rem', color: theme.palette.text.secondary,
+  fontWeight: 500, marginBottom: theme.spacing(1.5),
 }));
 
-const ItemDetail: React.FC<{ title: string; value: string | number; subValue?: string; color?: string }> = ({ title, value, subValue, color }) => (
-  <Box my={1}>
-    <LabelText>{title}</LabelText>
-    <Typography variant="h6" component="p" sx={{ color: color || 'inherit', fontWeight: 'medium' }}>
+const ItemDetail: React.FC<{ title: string; value: string | number; color?: string }> = ({ title, value, color }) => (
+  <Box display="flex" justifyContent="space-between" alignItems="center" my={0.5}>
+    <Typography variant="body2" color="text.secondary">{title}</Typography>
+    <Typography variant="body1" component="p" sx={{ color: color || 'text.primary', fontWeight: 'bold' }}>
       {value}
     </Typography>
-    {subValue && <Typography variant="caption" display="block">{subValue}</Typography>}
   </Box>
 );
 
-
-const DashboardFrames: React.FC<DashboardFramesProps> = ({
-  data,
-  title = 'Resumo Geral do Contrato',
-}) => {
+// Componente Principal do Dashboard
+const DashboardFrames: React.FC<DashboardFramesProps> = ({ data, title = 'Resumo Geral do Contrato' }) => {
   const theme = useTheme();
 
   if (!data) {
     return (
-      <Card sx={{ mt: 3, backgroundColor: theme.palette.grey[800] }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom sx={{ color: theme.palette.common.white }}>
-            {title}
-          </Typography>
-          <Typography variant="body2" sx={{ color: theme.palette.grey[400] }}>
-            Dados indisponíveis.
-          </Typography>
-        </CardContent>
-      </Card>
+      <Box display="flex" alignItems="center" justifyContent="center" minHeight="calc(100vh - 200px)">
+        <Card sx={{ p: 3, maxWidth: 400, textAlign: 'center' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>{title}</Typography>
+            <Typography variant="body2" color="text.secondary">Dados indisponíveis no momento.</Typography>
+          </CardContent>
+        </Card>
+      </Box>
     );
   }
 
-  const formatCurrency = (value: number) =>
-    new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-
+  const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   const formatPercentage = (value: number) => `${value.toFixed(1)}%`;
 
+  const spacingValue = 3; // Define o espaçamento (24px)
+
   return (
-    <Card sx={{ mt: 3, borderRadius: '12px', background: `linear-gradient(145deg, ${theme.palette.grey[800]}, ${theme.palette.grey[900]})`, boxShadow: theme.shadows[5] }}>
-      <CardContent>
-        <Typography variant="h5" gutterBottom sx={{ color: theme.palette.common.white, textAlign: 'center', mb: 3 }}>
-          {title}
-        </Typography>
-        <Grid container spacing={3}>
-          {/* Total General Value Consumed */}
-          <Grid item xs={12} sm={6} md={3}>
-            <FramePaper elevation={3}>
-              <LabelText>Valor Total Consumido</LabelText>
-              <ValueText>{formatCurrency(data.totalGeneralValueConsumed)}</ValueText>
+    <Box sx={{ flexGrow: 1, backgroundColor: theme.palette.background.default, p: { xs: 2, sm: 3 }, minHeight: '100%' }}>
+      <Typography variant="h5" gutterBottom sx={{ mb: 3, color: 'text.primary' }}>
+        {title}
+      </Typography>
+      
+      {/* NOVA ABORDAGEM: Container Flexbox Manual */}
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          flexWrap: 'wrap',
+          // Margem negativa para compensar o padding dos filhos
+          margin: theme.spacing(-spacingValue / 2) 
+        }}
+      >
+        {/* Card 1: Envolvido em um Box com largura responsiva e padding */}
+        <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
+            <FramePaper>
+                <Box><IconWrapper><MonetizationOnOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Valor Total Consumido</LabelText></Box>
+                <ValueText>{formatCurrency(data.totalGeneralValueConsumed)}</ValueText>
             </FramePaper>
-          </Grid>
+        </Box>
 
-          {/* Overall Quantity Percentage by Item */}
-          <Grid item xs={12} sm={6} md={3}>
-            <FramePaper elevation={3}>
-              <LabelText>Consumo Qtd. Itens</LabelText>
-              <Box sx={{ width: '100%', textAlign: 'left', pl:1, pr:1 }}>
-                 <ItemDetail title="Item 1" value={formatPercentage(data.overallQuantityPercentage.item1)} color={theme.palette.primary.light} />
-                 <ItemDetail title="Item 2" value={formatPercentage(data.overallQuantityPercentage.item2)} color={theme.palette.secondary.light}/>
-                 <ItemDetail title="Item 3" value={formatPercentage(data.overallQuantityPercentage.item3)} color={theme.palette.success.light}/>
-              </Box>
+        {/* Card 2 */}
+        <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
+            <FramePaper>
+                <Box><IconWrapper><DonutLargeOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Consumo Qtd. Itens (%)</LabelText></Box>
+                <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={formatPercentage(data.overallQuantityPercentage.item1)} color={theme.palette.primary.main} /><ItemDetail title="Item 2" value={formatPercentage(data.overallQuantityPercentage.item2)} color={theme.palette.secondary.main}/><ItemDetail title="Item 3" value={formatPercentage(data.overallQuantityPercentage.item3)} color="#f57c00" /></Box>
             </FramePaper>
-          </Grid>
+        </Box>
 
-          {/* Remaining Value by Item */}
-          <Grid item xs={12} sm={6} md={3}>
-            <FramePaper elevation={3}>
-              <LabelText>Valor Restante</LabelText>
-               <Box sx={{ width: '100%', textAlign: 'left', pl:1, pr:1 }}>
-                <ItemDetail title="Item 1" value={formatCurrency(data.remainingValueByItem.item1)} color={theme.palette.primary.light}/>
-                <ItemDetail title="Item 2" value={formatCurrency(data.remainingValueByItem.item2)} color={theme.palette.secondary.light} />
-                <ItemDetail title="Item 3" value={formatCurrency(data.remainingValueByItem.item3)} color={theme.palette.success.light}/>
-              </Box>
+        {/* Card 3 */}
+        <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
+            <FramePaper>
+                <Box><IconWrapper><AccountBalanceWalletOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Valor Restante por Item</LabelText></Box>
+                <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={formatCurrency(data.remainingValueByItem.item1)} color={theme.palette.primary.main}/><ItemDetail title="Item 2" value={formatCurrency(data.remainingValueByItem.item2)} color={theme.palette.secondary.main} /><ItemDetail title="Item 3" value={formatCurrency(data.remainingValueByItem.item3)} color="#f57c00"/></Box>
             </FramePaper>
-          </Grid>
+        </Box>
 
-          {/* Remaining Quantity by Item */}
-          <Grid item xs={12} sm={6} md={3}>
-            <FramePaper elevation={3}>
-              <LabelText>Qtd. Restante</LabelText>
-              <Box sx={{ width: '100%', textAlign: 'left', pl:1, pr:1 }}>
-                <ItemDetail title="Item 1" value={data.remainingQuantityByItem.item1.toLocaleString('pt-BR')} color={theme.palette.primary.light}/>
-                <ItemDetail title="Item 2" value={data.remainingQuantityByItem.item2.toLocaleString('pt-BR')} color={theme.palette.secondary.light}/>
-                <ItemDetail title="Item 3" value={data.remainingQuantityByItem.item3.toLocaleString('pt-BR')} color={theme.palette.success.light}/>
-              </Box>
+        {/* Card 4 */}
+        <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
+            <FramePaper>
+                <Box><IconWrapper><Inventory2OutlinedIcon fontSize="large" /></IconWrapper><LabelText>Qtd. Restante por Item</LabelText></Box>
+                <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={data.remainingQuantityByItem.item1.toLocaleString('pt-BR')} color={theme.palette.primary.main}/><ItemDetail title="Item 2" value={data.remainingQuantityByItem.item2.toLocaleString('pt-BR')} color={theme.palette.secondary.main}/><ItemDetail title="Item 3" value={data.remainingQuantityByItem.item3.toLocaleString('pt-BR')} color="#f57c00"/></Box>
             </FramePaper>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
