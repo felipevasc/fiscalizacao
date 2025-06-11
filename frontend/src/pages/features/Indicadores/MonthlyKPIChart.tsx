@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  TooltipProps,
+  type TooltipProps,
 } from 'recharts';
 import { Box, Typography, Card, CardContent } from '@mui/material';
 

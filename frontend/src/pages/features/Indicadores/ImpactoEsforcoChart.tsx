@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   Label,
   ReferenceLine,
-  TooltipProps,
+  type TooltipProps,
 } from 'recharts';
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
 
@@ -44,9 +44,9 @@ const ImpactoEsforcoChart: React.FC<ImpactoEsforcoChartProps> = ({ osList }) => 
   const processedData = useMemo(() => {
     const data: ProcessedImpactoEsforcoData[] = [];
     osList.forEach(os => {
-      const g = os.gut?.gravidade;
-      const u = os.gut?.urgencia;
-      const t = os.gut?.tendencia;
+      const g = os.gravidade;
+      const u = os.urgencia;
+      const t = os.tendencia;
       const udp = os.udp;
 
       if (
@@ -67,8 +67,8 @@ const ImpactoEsforcoChart: React.FC<ImpactoEsforcoChartProps> = ({ osList }) => 
 
         if (impactValue > 0) { // Ensure impact is also positive
             data.push({
-                id: os.id,
-                identificacaoOs: os.identificacao?.identificacao || 'N/A',
+                id: os.id ?? '',
+                identificacaoOs: os.identificacao?.numeroOS || 'N/A',
                 impact: impactValue,
                 effort: effortValue,
             });

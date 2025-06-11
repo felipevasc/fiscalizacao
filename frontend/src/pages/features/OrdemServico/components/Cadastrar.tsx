@@ -17,28 +17,65 @@ import Cronograma from './Cronograma';
 import MatrizGUT from './MatrizGUT';
 import Dimensionamento from './Dimensionamento';
 import Wizard from '../../../../components/Wizard';
+import Requisitante from './Requisitante';
 
 const OPTIONS: OptionProps[] = [
+  
   {
-    label: 'Minigestério de Gestão e Inovação - MGI',
-    value: 'Minigestério de Gestão e Inovação - MGI',
+    label:
+      'MDIC - Ministério do Desenvolvimento, Indústria, Comércio e Serviços',
+    value:
+      'MDIC - Ministério do Desenvolvimento, Indústria, Comércio e Serviços',
   },
   {
-    label: 'Minigestério do Trabalho e Emprego - MTE',
-    value: 'Minigestério do Trabalho e Emprego - MTE',
-  },
-  { label: 'Minigestério da Saúde - MS', value: 'Minigestério da Saúde - MS' },
-  {
-    label: 'Minigestério da Educação - MEC',
-    value: 'Minigestério da Educação - MEC',
+    label:
+      'MEMP — Ministério do Empreendedorismo, da Microempresa e da Empresa de Pequeno Porte',
+    value:
+      'MEMP — Ministério do Empreendedorismo, da Microempresa e da Empresa de Pequeno Porte',
   },
   {
-    label: 'Minigestério do Desenvolvimento Agrário - MDA',
-    value: 'Minigestério do Desenvolvimento Agrário - MDA',
+    label: 'MF - Ministério da Fazenda',
+    value: 'MF - Ministério da Fazenda',
   },
   {
-    label: 'Minigestério do Desenvolvimento Social e Combate à Fome - MDS',
-    value: 'Minigestério do Desenvolvimento Social e Combate à Fome - MDS',
+    label: 'MGI - Minigestério de Gestão e Inovação',
+    value: 'MGI - Minigestério de Gestão e Inovação',
+  },
+  {
+    label: 'MPO - Ministério do Planejamento e Orçamento',
+    value: 'MPO - Ministério do Planejamento e Orçamento',
+  },
+  {
+    label: 'MPI - Ministério dos Povos Indígenas',
+    value: 'MPI - Ministério dos Povos Indígenas',
+  },
+  {
+    label: 'MDHC - Ministério dos Direitos Humanos e da Cidadania',
+    value: 'MDHC - Ministério dos Direitos Humanos e da Cidadania',
+  },
+  {
+    label: 'MESP - Ministério do Esporte',
+    value: 'MESP - Ministério do Esporte',
+  },
+  {
+    label: 'MIR - Ministério da Igualdade Racial',
+    value: 'MIR - Ministério da Igualdade Racial',
+  },
+  {
+    label: 'MIN - Ministério das Mulheres',
+    value: 'MIN - Ministério das Mulheres',
+  },
+  {
+    label: 'MPS - Ministério da Previdência Social',
+    value: 'MPS - Ministério da Previdência Social',
+  },
+  {
+    label: 'MPOR - Ministério de Portos e Aeroportos',
+    value: 'MPOR - Ministério de Portos e Aeroportos',
+  },
+  {
+    label: 'MTUR - Ministério do Turismo',
+    value: 'MTUR - Ministério do Turismo',
   },
 ];
 
@@ -165,10 +202,19 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
     const passos = [];
     if (!avaliar) {
       passos.push({
+        titulo: 'Requisitante',
+        conteudo: (
+          <Requisitante
+            options={OPTIONS}
+            identificacao={identificacao}
+            onChange={setIdentificacao}
+          />
+        ),
+      });
+      passos.push({
         titulo: 'Identificação',
         conteudo: (
           <Identificacao
-            options={OPTIONS}
             identificacao={identificacao}
             onChange={setIdentificacao}
           />

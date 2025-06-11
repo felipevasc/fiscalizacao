@@ -11,7 +11,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "18/03/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "users",
+      "unidade": "MDIC - Ministério do Desenvolvimento, Indústria, Comércio e Serviços",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -70,7 +70,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "25/03/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MF - Ministério da Fazenda",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -129,7 +129,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "25/03/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MEMP — Ministério do Empreendedorismo, da Microempresa e da Empresa de Pequeno Porte",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -188,7 +188,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "01/04/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MGI - Minigestério de Gestão e Inovação",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -247,7 +247,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "08/04/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MPO - Ministério do Planejamento e Orçamento",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -306,7 +306,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "15/04/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "horas",
+      "unidade": "MGI - Minigestério de Gestão e Inovação",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -365,7 +365,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "15/04/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "horas",
+      "unidade": "MPI - Ministério dos Povos Indígenas",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -424,7 +424,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "15/04/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MDHC - Ministério dos Direitos Humanos e da Cidadania",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -483,7 +483,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "30/04/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "users",
+      "unidade": "MGI - Minigestério de Gestão e Inovação",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -542,7 +542,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "02/05/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MDHC - Ministério dos Direitos Humanos e da Cidadania",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -601,7 +601,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "06/05/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MESP - Ministério do Esporte",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -660,7 +660,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "08/05/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "horas",
+      "unidade": "MIR - Ministério da Igualdade Racial",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -719,7 +719,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "17/05/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "horas",
+      "unidade": "MIN - Ministério das Mulheres",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -778,7 +778,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "29/05/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "users",
+      "unidade": "MPS - Ministério da Previdência Social",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -837,7 +837,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "03/06/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MPS - Ministério da Previdência Social",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -896,7 +896,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "04/06/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MPOR - Ministério de Portos e Aeroportos",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -955,7 +955,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "10/06/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "horas",
+      "unidade": "MTUR - Ministério do Turismo",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -1014,7 +1014,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "11/06/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "UDP",
+      "unidade": "MPO - Ministério do Planejamento e Orçamento",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -1073,7 +1073,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "12/06/2024",
       "fimVigencia": "31/12/2024",
-      "unidade": "horas",
+      "unidade": "MGI - Minigestério de Gestão e Inovação",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },
@@ -1132,7 +1132,7 @@
       "preposto": "Fulano de Tal",
       "inicioVigencia": "27/06/2024",
       "fimVigencia": "31/07/2024",
-      "unidade": "users",
+      "unidade": "MPI - Ministério dos Povos Indígenas",
       "solicitante": "Solicitante TR",
       "email": "solicitante@empresa.com"
     },

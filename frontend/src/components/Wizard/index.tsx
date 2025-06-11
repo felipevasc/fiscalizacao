@@ -22,7 +22,7 @@ const Wizard: React.FC<WizardProps> = ({
 }) => {
   return (
     <div className='wizard-sample-2'>
-      <div className='br-wizard' {...{ vertical: 'vertical', step: 2 }}>
+      <div className='br-wizard' {...{ step: 2 }}>
         <div className='wizard-progress' role='tablist'>
           {passos?.map((p, i) => (
             <button

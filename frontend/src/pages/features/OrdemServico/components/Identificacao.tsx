@@ -2,7 +2,6 @@ import React from 'react';
 import Input from '../../../../components/Input';
 import Textarea from '../../../../components/Textarea';
 import FormGroup from '../../../../components/FormGroup';
-import Select, { type OptionProps } from '../../../../components/Select';
 import type { IdentificacaoData } from '../types/IdentificacaoData';
 
 
@@ -10,13 +9,11 @@ import type { IdentificacaoData } from '../types/IdentificacaoData';
 interface IdentificacaoProps {
   identificacao: IdentificacaoData;
   onChange: (novosDados: IdentificacaoData) => void;
-  options: OptionProps[];
 }
 
 const Identificacao: React.FC<IdentificacaoProps> = ({
   identificacao,
   onChange,
-  options,
 }) => {
   // Função genérica para atualizar campos simples
   const handleChange = (field: keyof IdentificacaoData, value: string) => {
@@ -83,28 +80,6 @@ const Identificacao: React.FC<IdentificacaoProps> = ({
           label='Fim Vigência'
           value={identificacao.fimVigencia}
           onChange={(e) => handleChange('fimVigencia', e.target.value?.replace(/\D/g, '').replace(/(\d{1,2})(\d{1,2})(\d{1,4})/, "$1/$2/$3"))}
-        />
-      </FormGroup>
-
-      <div className='h4'>Área Requisitante</div>
-
-      <Select
-        label='Unidade'
-        options={options}
-        value={identificacao.unidade}
-        onChange={(e) => handleChange('unidade', e)}
-      />
-
-      <FormGroup>
-        <Input
-          label='Solicitante'
-          value={identificacao.solicitante}
-          onChange={(e) => handleChange('solicitante', e.target.value)}
-        />
-        <Input
-          label='E-mail'
-          value={identificacao.email}
-          onChange={(e) => handleChange('email', e.target.value)}
         />
       </FormGroup>
     </div>

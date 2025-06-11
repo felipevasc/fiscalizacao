@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  TooltipProps,
+  type TooltipProps,
 } from 'recharts';
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
 
@@ -55,9 +55,9 @@ const MatrizGUTChart: React.FC<MatrizGUTChartProps> = ({ osList }) => {
     }> = {};
 
     osList.forEach(os => {
-      const g = os.gut?.gravidade;
-      const u = os.gut?.urgencia;
-      const t = os.gut?.tendencia;
+      const g = os.gravidade;
+      const u = os.urgencia;
+      const t = os.tendencia;
 
       if (g && u && t && !isNaN(Number(g)) && !isNaN(Number(u)) && !isNaN(Number(t))) {
         const gravidade = Number(g);

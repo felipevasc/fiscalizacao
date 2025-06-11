@@ -19,19 +19,13 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import type { OrdemServico } from '../OrdemServico/types/OrdemServico';
 import MatrizGUTChart from './MatrizGUTChart';
 import ImpactoEsforcoChart from './ImpactoEsforcoChart';
 import MonthlyKPIChart from './MonthlyKPIChart'; // Import the new MonthlyKPIChart
+import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
 
 // Estrutura de OS, estenda conforme necessidade
-interface OrdemServicoIndicadores extends OrdemServico {
-  dataConclusao?: string; // ISO date string
-  disponibilidadePercentual?: number; // IDS (99.5%)
-  satisfacaoPercentual?: number; // ISA (0–100%)
-  tempoAcessoDias?: number; // IDA
-  tempoRespostaHoras?: number; // IED
-}
+
 
 interface MonthlyData {
   mes: string;
@@ -125,10 +119,10 @@ export default function Indicadores() {
     }
 
     // GUT score calculations
-    if (os.gut && os.gut.gravidade && os.gut.urgencia && os.gut.tendencia) {
-      const gravidade = Number(os.gut.gravidade);
-      const urgencia = Number(os.gut.urgencia);
-      const tendencia = Number(os.gut.tendencia);
+    if (os.gravidade && os.urgencia && os.tendencia) {
+      const gravidade = Number(os.gravidade);
+      const urgencia = Number(os.urgencia);
+      const tendencia = Number(os.tendencia);
       if (!isNaN(gravidade) && !isNaN(urgencia) && !isNaN(tendencia)) {
         const gutScore = gravidade * urgencia * tendencia;
         sumGutScore += gutScore;
@@ -222,9 +216,9 @@ export default function Indicadores() {
 
     osList.forEach(os => {
       // Processamento para Novas OS e GUT Score Médio Mensal
-      if (os.identificacao?.data_emissao_os) {
+      if (os.identificacao?.dataEmissao) {
         try {
-          const emissaoDate = new Date(os.identificacao.data_emissao_os);
+          const emissaoDate = new Date(os.identificacao.dataEmissao);
           const key = `${emissaoDate.getFullYear()}/${(emissaoDate.getMonth() + 1).toString().padStart(2, '0')}`;
 
           if (!monthlyEvolution[key]) {
@@ -232,10 +226,10 @@ export default function Indicadores() {
           }
           monthlyEvolution[key].newOS++;
 
-          if (os.gut?.gravidade && os.gut?.urgencia && os.gut?.tendencia) {
-            const gravidade = Number(os.gut.gravidade);
-            const urgencia = Number(os.gut.urgencia);
-            const tendencia = Number(os.gut.tendencia);
+          if (os.gravidade && os.urgencia && os.tendencia) {
+            const gravidade = Number(os.gravidade);
+            const urgencia = Number(os.urgencia);
+            const tendencia = Number(os.tendencia);
             if (!isNaN(gravidade) && !isNaN(urgencia) && !isNaN(tendencia)) {
               monthlyEvolution[key].sumGutScore += gravidade * urgencia * tendencia;
               monthlyEvolution[key].countGutOs++;

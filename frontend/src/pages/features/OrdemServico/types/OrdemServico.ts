@@ -21,3 +21,11 @@ export interface OrdemServico {
   udp?: number;
   prazoDiasUteis?: number;
 }
+
+export interface OrdemServicoIndicadores extends OrdemServico {
+  dataConclusao?: string; // ISO date string
+  disponibilidadePercentual?: number; // IDS (99.5%)
+  satisfacaoPercentual?: number; // ISA (0–100%)
+  tempoAcessoDias?: number; // IDA
+  tempoRespostaHoras?: number; // IED
+}
