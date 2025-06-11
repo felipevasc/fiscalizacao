@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BrButton, BrCard } from '@govbr-ds/react-components'; // Removed BrTable
-import { Paper, Box, Typography, Grid } from '@mui/material';
+import { BrButton } from '@govbr-ds/react-components'; // Removed BrTable
+import { Paper, Box, Typography } from '@mui/material';
 import Table from '../../../../components/Table'; // Added Table import
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 
-import {
-  calcularPrazo,
-  calcularTipo,
-  corPorPrioridade,
-  rotuloPorPrioridade,
-} from '../functions';
+import { rotuloPorPrioridade } from '../functions';
 import type { OrdemServico } from '../types/OrdemServico';
 
 const CHAVE_STORAGE = 'sistema_os';
@@ -48,7 +44,6 @@ const Listagem = () => {
   return (
     <Box
       sx={{
-        maxWidth: 1200,
         margin: '0 auto',
         padding: { xs: 2, md: 3 },
         backgroundColor: '#EBF0F5',
@@ -103,59 +98,60 @@ const Listagem = () => {
           </BrButton>
         </Paper>
       ) : (
-      <Table
-        title="Ordens de Serviço"
-        columns={[
-          { header: 'Unidade de Origem', accessor: 'unidadeOrigem' },
-          { header: 'Número da OS', accessor: 'numeroOS' },
-          { header: 'Status', accessor: 'status' },
-          { header: 'Prioridade Prevista', accessor: 'prioridade' },
-          { header: 'Ações', accessor: 'acoes' },
-        ]}
-        data={listaOS.map((os) => ({
-          id: os.id, // Keep id for keying if needed, though Table component uses rowIndex
-          unidadeOrigem: os.udp || 'Unidade Não Especificada',
-          numeroOS: os.identificacao.numeroOS || os.id,
-          status: os.status,
-          prioridade: `${rotuloPorPrioridade(os.gutScore)} (${os.gutScore})`,
-          acoes: (
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              <BrButton
-                type="button"
-                size="small"
-                onClick={() => detalharOS(os.id)}>
-                <VisibilityIcon
-                  fontSize="small"
-                  sx={{ mr: 0.5, verticalAlign: 'middle' }}
-                />
-                Detalhar
-              </BrButton>
-              <BrButton
-                type="button"
-                size="small"
-                secondary={true}
-                onClick={() => editarOS(os.id)}>
-                <EditIcon
-                  fontSize="small"
-                  sx={{ mr: 0.5, verticalAlign: 'middle' }}
-                />
-                Editar
-              </BrButton>
-              <BrButton
-                type="button"
-                size="small"
-                secondary={true}
-                onClick={() => avaliarOS(os.id)}>
-                <EditIcon
-                  fontSize="small"
-                  sx={{ mr: 0.5, verticalAlign: 'middle' }}
-                />
-                Avaliar
-              </BrButton>
-            </Box>
-          ),
-        }))}
-      />
+        <Table
+          columns={[
+            { header: 'Unidade de Origem', accessor: 'unidadeOrigem' },
+            { header: 'Número da OS', accessor: 'numeroOS' },
+            { header: 'Status', accessor: 'status' },
+            { header: 'Prioridade Prevista', accessor: 'prioridade' },
+            { header: 'Ações', accessor: 'acoes' },
+          ]}
+          data={listaOS
+            .sort((a, b) =>
+              a.identificacao.unidade > b.identificacao.unidade ? 1 : -1
+            )
+            .map((os) => ({
+              id: os.id, // Keep id for keying if needed, though Table component uses rowIndex
+              unidadeOrigem:
+                os.identificacao.unidade || 'Unidade Não Especificada',
+              numeroOS: os.identificacao.numeroOS || os.id,
+              status: os.status,
+              prioridade: `${rotuloPorPrioridade(os.gutScore)} (${
+                os.gutScore
+              })`,
+              acoes: (
+                <Box sx={{ display: 'flex', gap: 0.5 }}>
+                  <BrButton
+                    type='button'
+                    size='small'
+                    onClick={() => detalharOS(os.id)}>
+                    <VisibilityIcon
+                      fontSize='small'
+                      sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                    />
+                  </BrButton>
+                  <BrButton
+                    type='button'
+                    size='small'
+                    onClick={() => editarOS(os.id)}>
+                    <EditIcon
+                      fontSize='small'
+                      sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                    />
+                  </BrButton>
+                  <BrButton
+                    type='button'
+                    size='small'
+                    onClick={() => avaliarOS(os.id)}>
+                    <AnalyticsIcon
+                      fontSize='small'
+                      sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                    />
+                  </BrButton>
+                </Box>
+              ),
+            }))}
+        />
       )}
     </Box>
   );

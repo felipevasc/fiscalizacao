@@ -3,7 +3,15 @@
   width: 100%; /* Ensure table takes full width */
 }
 .br-table th, .br-table td {
-  border: 1px solid #eee;
-  padding: 8px;
+  border: 1px solid #aaa;
   text-align: left;
+}
+.br-table th, .br-table td:last-child {
+  text-align: center;
+}
+.br-table tbody > tr:nth-child(odd) > td {
+  background-color: #ffffff88;
+}
+.br-table tbody > tr:nth-child(even) > td {
+  background-color: #00000011;
 }

@@ -201,22 +201,13 @@ const Cadastrar: React.FC<PropsCadastrar> = ({
     const passos = [];
     if (!avaliar) {
       passos.push({
-        titulo: 'Requisitante',
-        conteudo: (
-          <Requisitante
-            options={OPTIONS}
-            identificacao={identificacao}
-            onChange={setIdentificacao}
-          />
-        ),
-      });
-      passos.push({
         titulo: 'Identificação',
         conteudo: (
           <>
             <Identificacao
               identificacao={identificacao}
               onChange={setIdentificacao}
+              options={OPTIONS}
             />
             <Select
               label='Status'

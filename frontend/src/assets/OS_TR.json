@@ -2,7 +2,7 @@
   {
     "id": "1",
     "identificacao": {
-      "numeroOS": "OS-1",
+      "numeroOS": "1",
       "dataEmissao": "18/03/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -61,7 +61,7 @@
   {
     "id": "2",
     "identificacao": {
-      "numeroOS": "OS-2",
+      "numeroOS": "2",
       "dataEmissao": "25/03/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -120,7 +120,7 @@
   {
     "id": "3",
     "identificacao": {
-      "numeroOS": "OS-3",
+      "numeroOS": "3",
       "dataEmissao": "25/03/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -179,7 +179,7 @@
   {
     "id": "4",
     "identificacao": {
-      "numeroOS": "OS-4",
+      "numeroOS": "4",
       "dataEmissao": "01/04/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -238,7 +238,7 @@
   {
     "id": "5",
     "identificacao": {
-      "numeroOS": "OS-5",
+      "numeroOS": "5",
       "dataEmissao": "08/04/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -297,7 +297,7 @@
   {
     "id": "6",
     "identificacao": {
-      "numeroOS": "OS-6",
+      "numeroOS": "6",
       "dataEmissao": "15/04/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -356,7 +356,7 @@
   {
     "id": "7",
     "identificacao": {
-      "numeroOS": "OS-7",
+      "numeroOS": "7",
       "dataEmissao": "15/04/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -415,7 +415,7 @@
   {
     "id": "8",
     "identificacao": {
-      "numeroOS": "OS-8",
+      "numeroOS": "8",
       "dataEmissao": "15/04/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -474,7 +474,7 @@
   {
     "id": "9",
     "identificacao": {
-      "numeroOS": "OS-9",
+      "numeroOS": "9",
       "dataEmissao": "30/04/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -533,7 +533,7 @@
   {
     "id": "10",
     "identificacao": {
-      "numeroOS": "OS-10",
+      "numeroOS": "10",
       "dataEmissao": "02/05/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -592,7 +592,7 @@
   {
     "id": "11",
     "identificacao": {
-      "numeroOS": "OS-11",
+      "numeroOS": "11",
       "dataEmissao": "06/05/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -651,7 +651,7 @@
   {
     "id": "12",
     "identificacao": {
-      "numeroOS": "OS-12",
+      "numeroOS": "12",
       "dataEmissao": "08/05/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -710,7 +710,7 @@
   {
     "id": "13",
     "identificacao": {
-      "numeroOS": "OS-13",
+      "numeroOS": "13",
       "dataEmissao": "17/05/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -769,7 +769,7 @@
   {
     "id": "14",
     "identificacao": {
-      "numeroOS": "OS-14",
+      "numeroOS": "14",
       "dataEmissao": "29/05/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -828,7 +828,7 @@
   {
     "id": "15",
     "identificacao": {
-      "numeroOS": "OS-15",
+      "numeroOS": "15",
       "dataEmissao": "03/06/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -887,7 +887,7 @@
   {
     "id": "16",
     "identificacao": {
-      "numeroOS": "OS-16",
+      "numeroOS": "16",
       "dataEmissao": "04/06/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -946,7 +946,7 @@
   {
     "id": "17",
     "identificacao": {
-      "numeroOS": "OS-17",
+      "numeroOS": "17",
       "dataEmissao": "10/06/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -1005,7 +1005,7 @@
   {
     "id": "18",
     "identificacao": {
-      "numeroOS": "OS-18",
+      "numeroOS": "18",
       "dataEmissao": "11/06/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -1064,7 +1064,7 @@
   {
     "id": "19",
     "identificacao": {
-      "numeroOS": "OS-19",
+      "numeroOS": "19",
       "dataEmissao": "12/06/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",
@@ -1123,7 +1123,7 @@
   {
     "id": "20",
     "identificacao": {
-      "numeroOS": "OS-20",
+      "numeroOS": "20",
       "dataEmissao": "27/06/2024",
       "contratoNota": "TR-001",
       "objetoContrato": "Análise Técnica",

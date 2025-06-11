@@ -8,6 +8,7 @@ type InputProps = {
   onChange?: (value: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   type?: string;
+  readonly?: boolean;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -17,6 +18,7 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   value,
   type = 'text',
+  readonly = false,
 }) => {
   return (
     <BrInput
@@ -26,6 +28,7 @@ const Input: React.FC<InputProps> = ({
       placeholder={placeholder}
       value={value}
       type={type}
+      disabled={readonly}
     />
   );
 };
