@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BrButton, BrCard, BrTable } from '@govbr-ds/react-components';
+import { BrButton, BrCard } from '@govbr-ds/react-components'; // Removed BrTable
 import { Paper, Box, Typography, Grid } from '@mui/material';
+import Table from '../../../../components/Table'; // Added Table import
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,21 +21,7 @@ const Listagem = () => {
   const [listaOS, setListaOS] = useState<OrdemServico[]>([]);
   const navegar = useNavigate();
 
-  const groupOSByUnidade = (
-    lista: OrdemServico[],
-  ): Record<string, OrdemServico[]> => {
-    return lista.reduce(
-      (acc, os) => {
-        const unidade = os.udp || 'Unidade Não Especificada';
-        if (!acc[unidade]) {
-          acc[unidade] = [];
-        }
-        acc[unidade].push(os);
-        return acc;
-      },
-      {} as Record<string, OrdemServico[]>,
-    );
-  };
+  // groupOSByUnidade function removed
 
   useEffect(() => {
     const armazenado = localStorage.getItem(CHAVE_STORAGE);
@@ -116,79 +103,59 @@ const Listagem = () => {
           </BrButton>
         </Paper>
       ) : (
-        <BrTable>
-          <BrTable.Head>
-            <BrTable.Row>
-              <BrTable.Cell header={true}>Número da OS</BrTable.Cell>
-              <BrTable.Cell header={true}>Status</BrTable.Cell>
-              <BrTable.Cell header={true}>Prioridade Prevista</BrTable.Cell>
-              <BrTable.Cell header={true}>Ações</BrTable.Cell>
-            </BrTable.Row>
-          </BrTable.Head>
-          <BrTable.Body>
-            {Object.entries(groupOSByUnidade(listaOS)).map(
-              ([unidadeNome, osPorUnidade]) => (
-                <>
-                  <BrTable.Row key={`${unidadeNome}-header`}>
-                    <BrTable.Cell
-                      header={true}
-                      colSpan={4} /* Adjusted colSpan to 4 */
-                      style={{ backgroundColor: '#f0f0f0', fontWeight: 'bold' }}>
-                      {unidadeNome} (Unidade de Origem)
-                    </BrTable.Cell>
-                  </BrTable.Row>
-                  {osPorUnidade.map((os) => (
-                    <BrTable.Row key={os.id}>
-                      <BrTable.Cell>
-                        {os.identificacao.numeroOS || os.id}
-                      </BrTable.Cell>
-                      <BrTable.Cell>{os.status}</BrTable.Cell>
-                      <BrTable.Cell>
-                        {rotuloPorPrioridade(os.gutScore)} ({os.gutScore})
-                      </BrTable.Cell>
-                      <BrTable.Cell>
-                        <Box sx={{ display: 'flex', gap: 0.5 }}> {/* Reduced gap slightly */}
-                          <BrButton
-                            type='button'
-                            size='small'
-                            onClick={() => detalharOS(os.id)}>
-                            <VisibilityIcon
-                              fontSize='small'
-                              sx={{ mr: 0.5, verticalAlign: 'middle' }}
-                            />
-                            Detalhar
-                          </BrButton>
-                          <BrButton
-                            type='button'
-                            size='small'
-                            secondary={true}
-                            onClick={() => editarOS(os.id)}>
-                            <EditIcon
-                              fontSize='small'
-                              sx={{ mr: 0.5, verticalAlign: 'middle' }}
-                            />
-                            Editar
-                          </BrButton>
-                          <BrButton
-                            type='button'
-                            size='small'
-                            secondary={true}
-                            onClick={() => avaliarOS(os.id)}>
-                            <EditIcon
-                              fontSize='small'
-                              sx={{ mr: 0.5, verticalAlign: 'middle' }}
-                            />
-                            Avaliar
-                          </BrButton>
-                        </Box>
-                      </BrTable.Cell>
-                    </BrTable.Row>
-                  ))}
-                </>
-              ),
-            )}
-          </BrTable.Body>
-        </BrTable>
+      <Table
+        title="Ordens de Serviço"
+        columns={[
+          { header: 'Unidade de Origem', accessor: 'unidadeOrigem' },
+          { header: 'Número da OS', accessor: 'numeroOS' },
+          { header: 'Status', accessor: 'status' },
+          { header: 'Prioridade Prevista', accessor: 'prioridade' },
+          { header: 'Ações', accessor: 'acoes' },
+        ]}
+        data={listaOS.map((os) => ({
+          id: os.id, // Keep id for keying if needed, though Table component uses rowIndex
+          unidadeOrigem: os.udp || 'Unidade Não Especificada',
+          numeroOS: os.identificacao.numeroOS || os.id,
+          status: os.status,
+          prioridade: `${rotuloPorPrioridade(os.gutScore)} (${os.gutScore})`,
+          acoes: (
+            <Box sx={{ display: 'flex', gap: 0.5 }}>
+              <BrButton
+                type="button"
+                size="small"
+                onClick={() => detalharOS(os.id)}>
+                <VisibilityIcon
+                  fontSize="small"
+                  sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                />
+                Detalhar
+              </BrButton>
+              <BrButton
+                type="button"
+                size="small"
+                secondary={true}
+                onClick={() => editarOS(os.id)}>
+                <EditIcon
+                  fontSize="small"
+                  sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                />
+                Editar
+              </BrButton>
+              <BrButton
+                type="button"
+                size="small"
+                secondary={true}
+                onClick={() => avaliarOS(os.id)}>
+                <EditIcon
+                  fontSize="small"
+                  sx={{ mr: 0.5, verticalAlign: 'middle' }}
+                />
+                Avaliar
+              </BrButton>
+            </Box>
+          ),
+        }))}
+      />
       )}
     </Box>
   );
