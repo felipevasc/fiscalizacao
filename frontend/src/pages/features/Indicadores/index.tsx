@@ -21,8 +21,17 @@ import {
 } from 'recharts';
 import MatrizGUTChart from './MatrizGUTChart';
 import ImpactoEsforcoChart from './ImpactoEsforcoChart';
-import MonthlyKPIChart from './MonthlyKPIChart'; // Import the new MonthlyKPIChart
+import MonthlyKPIChart from './MonthlyKPIChart';
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
+
+// New imports for dashboard
+import { processDashboardData } from './dataProcessing';
+import type { DashboardData } from './types';
+import MonthlyItemConsumptionChart from './MonthlyItemConsumptionChart';
+import TotalMonthlyValueChart from './TotalMonthlyValueChart';
+import AccumulatedItemQuantityChart from './AccumulatedItemQuantityChart';
+import AccumulatedItemValueChart from './AccumulatedItemValueChart';
+import ConsumptionSummaryCards from './ConsumptionSummaryCards';
 
 // Estrutura de OS, estenda conforme necessidade
 
@@ -39,6 +48,36 @@ interface MonthlyKPIEvolution {
   completedOSCount?: number;
 }
 
+// Helper function to parse dd/mm/yyyy strings to Date objects
+const parseStringDate = (dateStr: string | undefined | null): Date | null => {
+  if (!dateStr) return null;
+  // Check if the date string is already in YYYY-MM-DD format (ISO-like) which new Date() handles well
+  if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
+    const parsedDate = new Date(dateStr);
+    if (!isNaN(parsedDate.getTime())) {
+      return parsedDate;
+    }
+  }
+  // Proceed with dd/mm/yyyy parsing
+  const parts = dateStr.split('/');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+    const year = parseInt(parts[2], 10);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      const date = new Date(year, month, day);
+      // Basic validation: check if the constructed date matches the input parts
+      // This helps catch invalid dates like 31/02/2023
+      if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
+        return date;
+      }
+    }
+  }
+  console.warn(`Invalid date string encountered: ${dateStr}`);
+  return null; // Fallback for invalid or unparseable dates
+};
+
+
 export default function Indicadores() {
   const [osList, setOsList] = useState<OrdemServicoIndicadores[]>([]);
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
@@ -46,6 +85,7 @@ export default function Indicadores() {
   const [forecastAvgGutScore, setForecastAvgGutScore] = useState<number | undefined>(undefined);
   const [forecastNewOSCount, setForecastNewOSCount] = useState<number | undefined>(undefined);
   const [forecastCompletedOSCount, setForecastCompletedOSCount] = useState<number | undefined>(undefined);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
 
 
   // Carrega OS do localStorage
@@ -54,8 +94,12 @@ export default function Indicadores() {
     try {
       const list = JSON.parse(raw) as OrdemServicoIndicadores[];
       setOsList(list);
-    } catch {
+      // Process data for the new dashboard components
+      setDashboardData(processDashboardData(list));
+    } catch (error) {
+      console.error("Error loading or processing OS data:", error);
       setOsList([]);
+      setDashboardData(null);
     }
   }, []);
 
@@ -64,8 +108,19 @@ export default function Indicadores() {
 
   // On‐time: dataConclusao ≤ dataFimPrevista
   const onTimeCount = osList.filter((os) => {
-    if (!os.dataConclusao || !os.cronograma.data_fim) return false;
-    return new Date(os.dataConclusao) <= new Date(os.cronograma.data_inicio);
+    const dataConclusao = parseStringDate(os.dataConclusao);
+    const dataFimPrevista = parseStringDate(os.cronograma.data_fim); // Assuming data_fim is also dd/mm/yyyy
+    // Note: The original logic used os.cronograma.data_inicio for comparison.
+    // If data_inicio is also dd/mm/yyyy, it should be parsed too.
+    // For now, sticking to data_fim as per the variable name "dataFimPrevista"
+    // and the comment "dataConclusao ≤ dataFimPrevista".
+    // If os.cronograma.data_inicio is the correct field and is dd/mm/yyyy, use:
+    // const dataInicioPrevista = parseStringDate(os.cronograma.data_inicio);
+    // if (!dataConclusao || !dataInicioPrevista) return false;
+    // return dataConclusao <= dataInicioPrevista;
+
+    if (!dataConclusao || !dataFimPrevista) return false;
+    return dataConclusao <= dataFimPrevista;
   }).length;
   const pctOnTime = totalOS ? Math.round((onTimeCount / totalOS) * 100) : 0;
 
@@ -183,19 +238,22 @@ export default function Indicadores() {
   useEffect(() => {
     const mapMes: Record<string, { total: number; onTime: number }> = {};
     osList.forEach((os) => {
-      const d = os.cronograma.data_fim || os.dataConclusao || '';
-      if (!d) return;
-      const dt = new Date(d);
-      const key = `${dt.getFullYear()}/${(dt.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}`;
+      const dateString = os.cronograma.data_fim || os.dataConclusao;
+      const dt = parseStringDate(dateString);
+
+      if (!dt) return; // Skip if date is invalid
+
+      const key = `${dt.getFullYear()}/${(dt.getMonth() + 1).toString().padStart(2, '0')}`;
+
       if (!mapMes[key]) mapMes[key] = { total: 0, onTime: 0 };
       mapMes[key].total++;
-      if (
-        os.dataConclusao &&
-        new Date(os.dataConclusao) <= new Date(os.cronograma.data_fim!)
-      )
+
+      const dataConclusao = parseStringDate(os.dataConclusao);
+      const dataFimPrevista = parseStringDate(os.cronograma.data_fim);
+
+      if (dataConclusao && dataFimPrevista && dataConclusao <= dataFimPrevista) {
         mapMes[key].onTime++;
+      }
     });
     const arr = Object.entries(mapMes).map(([mes, { total, onTime }]) => ({
       mes,
@@ -217,10 +275,9 @@ export default function Indicadores() {
     osList.forEach(os => {
       // Processamento para Novas OS e GUT Score Médio Mensal
       if (os.identificacao?.dataEmissao) {
-        try {
-          const emissaoDate = new Date(os.identificacao.dataEmissao);
+        const emissaoDate = parseStringDate(os.identificacao.dataEmissao);
+        if (emissaoDate) {
           const key = `${emissaoDate.getFullYear()}/${(emissaoDate.getMonth() + 1).toString().padStart(2, '0')}`;
-
           if (!monthlyEvolution[key]) {
             monthlyEvolution[key] = { sumGutScore: 0, countGutOs: 0, newOS: 0, completedOS: 0 };
           }
@@ -235,24 +292,23 @@ export default function Indicadores() {
               monthlyEvolution[key].countGutOs++;
             }
           }
-        } catch (e) {
-          console.error("Error processing OS emission date or GUT score:", e);
+        } else {
+          // console.warn(`Could not parse dataEmissao: ${os.identificacao.dataEmissao} for OS ID: ${os.id}`);
         }
       }
 
       // Processamento para OS Concluídas
       if (os.dataConclusao) {
-         try {
-          const conclusaoDate = new Date(os.dataConclusao);
+        const conclusaoDate = parseStringDate(os.dataConclusao);
+        if (conclusaoDate) {
           const key = `${conclusaoDate.getFullYear()}/${(conclusaoDate.getMonth() + 1).toString().padStart(2, '0')}`;
-
           if (!monthlyEvolution[key]) {
-             // Initialize if not already done by new OS processing
+            // Initialize if not already done by new OS processing
             monthlyEvolution[key] = { sumGutScore: 0, countGutOs: 0, newOS: 0, completedOS: 0 };
           }
           monthlyEvolution[key].completedOS++;
-        } catch (e) {
-          console.error("Error processing OS conclusion date:", e);
+        } else {
+          // console.warn(`Could not parse dataConclusao: ${os.dataConclusao} for OS ID: ${os.id}`);
         }
       }
     });
@@ -311,6 +367,11 @@ export default function Indicadores() {
       </Typography>
       <Divider sx={{ mb: 3 }} />
 
+      {/* Consumption Summary Cards */}
+      {dashboardData && <ConsumptionSummaryCards data={dashboardData.consumptionSummaryData} />}
+
+      <Divider sx={{ my: 4 }} /> {/* Adjusted divider for separation */}
+
       {/* Row 1: Overview KPIs */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
@@ -349,7 +410,7 @@ export default function Indicadores() {
       </Grid>
 
       {/* Row 2: Efficiency & Support KPIs */}
-      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 2 }}>
+      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 3 }}>
         Eficiência & Suporte
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -388,7 +449,7 @@ export default function Indicadores() {
       </Grid>
 
       {/* GUT Analysis Section */}
-      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 2 }}>
+      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 3 }}>
         Análise GUT
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -423,7 +484,7 @@ export default function Indicadores() {
       </Grid>
 
       {/* OS Characteristics Section */}
-      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 2 }}>
+      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 3 }}>
         Características das OS
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -450,7 +511,7 @@ export default function Indicadores() {
       </Grid>
 
       {/* Monthly Evolution & Forecasts Section */}
-      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 2 }}>
+      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 3 }}>
         Evolução Mensal e Previsões
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -538,7 +599,7 @@ export default function Indicadores() {
       </Grid>
 
       {/* Impact x Effort Analysis Section */}
-      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 2 }}>
+      <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 3 }}>
         Análise Impacto x Esforço
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -553,6 +614,29 @@ export default function Indicadores() {
           </Card>
         </Grid>
       </Grid>
+
+      {/* New Section: Análise Detalhada da Execução Contratual */}
+      {dashboardData && (
+        <>
+          <Typography variant='h5' gutterBottom sx={{ mt: 4, mb: 3 }}>
+            Análise Detalhada da Execução Contratual
+          </Typography>
+          <Grid container spacing={3} sx={{ mb: 4 }}>
+            <Grid item xs={12} md={6}>
+              <MonthlyItemConsumptionChart data={dashboardData.monthlyItemConsumptionData} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TotalMonthlyValueChart data={dashboardData.totalMonthlyConsumptionData} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <AccumulatedItemQuantityChart data={dashboardData.accumulatedItemConsumptionData} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <AccumulatedItemValueChart data={dashboardData.accumulatedItemConsumptionData} />
+            </Grid>
+          </Grid>
+        </>
+      )}
     </Box>
   );
 }
