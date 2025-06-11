@@ -1,0 +1,75 @@
+.dashboard-container {
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.kpi-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.kpi-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  min-width: 200px;
+  text-align: center;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.kpi-card h3 {
+  margin-top: 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.kpi-card p {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #007bff; /* Example color */
+  margin-bottom: 5px;
+}
+
+.kpi-card .sub-text {
+  font-size: 0.9em;
+  color: #666;
+}
+
+
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to single column for smaller screens */
+  gap: 30px;
+}
+
+.chart-wrapper {
+  height: 400px; /* Nivo charts need a defined height container */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+/* For larger screens, maybe 2 columns for charts 3 & 4 */
+@media (min-width: 1200px) {
+  .charts-container {
+    /* If you want two charts side-by-side at the bottom */
+    /* grid-template-columns: 1fr 1fr; */
+  }
+  /* Example: make charts 3 and 4 appear in two columns */
+  .chart-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}

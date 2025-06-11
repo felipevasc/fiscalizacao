@@ -5,6 +5,7 @@ import Indicadores from '../pages/features/Indicadores';
 import Listagem from '../pages/features/OrdemServico/Listagem';
 import OsDetalhe from '../pages/features/OrdemServico/Detalhar';
 import AcompanhamentoOS from '../pages/features/OrdemServico/Acompanhamento';
+import DashboardPage from '../pages/Dashboard/DashboardPage'; // Import DashboardPage
 
 const RotasInternas = () => {
   return (
@@ -18,6 +19,7 @@ const RotasInternas = () => {
         <Route path='/os/editar/:id' element={<TipoOrdemServico />} />
         <Route path='/os/avaliar/:id' element={<TipoOrdemServico avaliar={true} />} />
         <Route path="/os/acompanhamento" element={<AcompanhamentoOS />} />
+        <Route path="/dashboard" element={<DashboardPage />} /> {/* Add Dashboard Route */}
       </Routes>
     </BrowserRouter>
   );
