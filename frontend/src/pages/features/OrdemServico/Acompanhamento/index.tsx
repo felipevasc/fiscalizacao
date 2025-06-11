@@ -111,7 +111,7 @@ const TITULOS_STATUS = [
   'Encerrada',
 ];
 
-function carregarOrdensDoStorage(): (OrdemServico & {
+export function carregarOrdensDoStorage(): (OrdemServico & {
   gravidade: number;
   urgencia: number;
   tendencia: number;

@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { AccumulatedItemConsumption } from './types';
+import { type AccumulatedItemConsumption } from './types';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 
 interface AccumulatedItemValueChartProps {

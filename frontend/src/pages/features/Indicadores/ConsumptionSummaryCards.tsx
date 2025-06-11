@@ -1,6 +1,6 @@
 // frontend/src/pages/features/Indicadores/ConsumptionSummaryCards.tsx
 import { Card, CardContent, Typography, Grid, Box, LinearProgress } from '@mui/material';
-import { ConsumptionSummary } from './types';
+import { type ConsumptionSummary } from './types';
 
 interface ConsumptionSummaryCardsProps {
   data: ConsumptionSummary | null;

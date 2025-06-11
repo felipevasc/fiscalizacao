@@ -1,12 +1,12 @@
 // frontend/src/pages/features/Indicadores/dataProcessing.ts
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico'; // Assuming this is the type for OS_TR.json items
-import { Item } from '../OrdemServico/types/Item'; // Import Item type
+import { type Item } from '../OrdemServico/types/Item'; // Import Item type
 import {
-  MonthlyItemConsumption,
-  TotalMonthlyConsumption,
-  AccumulatedItemConsumption,
-  ConsumptionSummary,
-  DashboardData,
+  type MonthlyItemConsumption,
+  type TotalMonthlyConsumption,
+  type AccumulatedItemConsumption,
+  type ConsumptionSummary,
+  type DashboardData,
 } from './types';
 
 // Totals provided in the issue description

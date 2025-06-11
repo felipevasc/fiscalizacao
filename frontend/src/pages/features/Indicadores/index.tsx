@@ -1,5 +1,5 @@
 // src/pages/Indicadores.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Grid,
@@ -32,6 +32,7 @@ import TotalMonthlyValueChart from './TotalMonthlyValueChart';
 import AccumulatedItemQuantityChart from './AccumulatedItemQuantityChart';
 import AccumulatedItemValueChart from './AccumulatedItemValueChart';
 import ConsumptionSummaryCards from './ConsumptionSummaryCards';
+import { carregarOrdensDoStorage } from '../OrdemServico/Acompanhamento';
 
 // Estrutura de OS, estenda conforme necessidade
 
@@ -87,6 +88,43 @@ export default function Indicadores() {
   const [forecastCompletedOSCount, setForecastCompletedOSCount] = useState<number | undefined>(undefined);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
 
+
+  const monthlyNewOSData = useMemo(() => {
+    //realizar reduce para agrupar por mês
+    return carregarOrdensDoStorage()?.filter(o => ['Não Iniciada', 'Priorizada', 'Em Execução'].includes(o.status)).map(ordem => {
+      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
+      return {
+        mes,
+        value: ordem.gutScore,
+      };
+    }
+    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes)?.length })).filter((e, i, arr) => i === arr.findIndex((a) => a.mes === e.mes)) || [];
+  }, [])
+
+  const monthlyCompletedOSData = useMemo(() => {
+    //realizar reduce para agrupar por mês
+    return carregarOrdensDoStorage()?.filter(o => !['Não Iniciada', 'Priorizada', 'Em Execução'].includes(o.status)).map(ordem => {
+      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
+      return {
+        mes,
+        value: ordem.gutScore,
+      };
+    }
+    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes)?.length })).filter((e, i, arr) => i === arr.findIndex((a) => a.mes === e.mes)) || [];
+  }, [])
+
+
+  const acumuladoEntregue = useMemo(() => {
+    //realizar reduce para agrupar por mês
+    return carregarOrdensDoStorage()?.map(ordem => {
+      const mes = new Date(ordem.identificacao.dataEmissao.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')).toLocaleString('default', { month: '2-digit', year: 'numeric' });
+      return {
+        mes,
+        value: ordem.itens.reduce((acc, item) => acc + (item.valorTotal || 0), 0),
+      };
+    }
+    ).map((i, idx, arr) => ({ mes: i.mes, value: arr.filter(a => a.mes === i.mes).reduce((acc, item) => acc + (item.value || 0), 0) })) || [];
+  }, [])
 
   // Carrega OS do localStorage
   useEffect(() => {
@@ -351,11 +389,11 @@ export default function Indicadores() {
     mes: item.mes,
     value: item.avgGutScore,
   }));
-  const monthlyNewOSData = monthlyKPIEvolutionData.map(item => ({
+  const monthlyNewOSData2 = monthlyKPIEvolutionData.map(item => ({
     mes: item.mes,
     value: item.newOSCount,
   }));
-  const monthlyCompletedOSData = monthlyKPIEvolutionData.map(item => ({
+  const monthlyCompletedOSData2 = monthlyKPIEvolutionData.map(item => ({
     mes: item.mes,
     value: item.completedOSCount,
   }));

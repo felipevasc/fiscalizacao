@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { MonthlyItemConsumption } from './types';
+import { type MonthlyItemConsumption } from './types';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 
 interface MonthlyItemConsumptionChartProps {
