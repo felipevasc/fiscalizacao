@@ -17,13 +17,9 @@ const theme = createTheme({
 });
 
 
-// src/DashboardFrames.tsx
-
 import React from 'react';
 import { Card, CardContent, Typography, Box, Paper, useTheme, styled } from '@mui/material';
-// O componente Grid não é mais importado
 
-// Interfaces e Ícones
 export interface DashboardFramesData {
   totalGeneralValueConsumed: number;
   overallQuantityPercentage: { item1: number; item2: number; item3: number; };
@@ -79,7 +75,6 @@ const ItemDetail: React.FC<{ title: string; value: string | number; color?: stri
   </Box>
 );
 
-// Componente Principal do Dashboard
 const DashboardFrames: React.FC<DashboardFramesProps> = ({ data, title = 'Resumo Geral do Contrato' }) => {
   const theme = useTheme();
 
@@ -99,53 +94,47 @@ const DashboardFrames: React.FC<DashboardFramesProps> = ({ data, title = 'Resumo
   const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   const formatPercentage = (value: number) => `${value.toFixed(1)}%`;
 
-  const spacingValue = 3; // Define o espaçamento (24px)
+  const spacingValue = 3;
 
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: theme.palette.background.default, p: { xs: 2, sm: 3 }, minHeight: '100%' }}>
       <Typography variant="h5" gutterBottom sx={{ mb: 3, color: 'text.primary' }}>
         {title}
       </Typography>
-      
-      {/* NOVA ABORDAGEM: Container Flexbox Manual */}
-      <Box 
-        sx={{ 
-          display: 'flex', 
+
+      <Box
+        sx={{
+          display: 'flex',
           flexWrap: 'wrap',
-          // Margem negativa para compensar o padding dos filhos
-          margin: theme.spacing(-spacingValue / 2) 
+          margin: theme.spacing(-spacingValue / 2)
         }}
       >
-        {/* Card 1: Envolvido em um Box com largura responsiva e padding */}
         <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
-            <FramePaper>
-                <Box><IconWrapper><MonetizationOnOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Valor Total Consumido</LabelText></Box>
-                <ValueText>{formatCurrency(data.totalGeneralValueConsumed)}</ValueText>
-            </FramePaper>
+          <FramePaper>
+            <Box><IconWrapper><MonetizationOnOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Valor Total Consumido</LabelText></Box>
+            <ValueText>{formatCurrency(data.totalGeneralValueConsumed)}</ValueText>
+          </FramePaper>
         </Box>
 
-        {/* Card 2 */}
         <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
-            <FramePaper>
-                <Box><IconWrapper><DonutLargeOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Consumo Qtd. Itens (%)</LabelText></Box>
-                <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={formatPercentage(data.overallQuantityPercentage.item1)} color={theme.palette.primary.main} /><ItemDetail title="Item 2" value={formatPercentage(data.overallQuantityPercentage.item2)} color={theme.palette.secondary.main}/><ItemDetail title="Item 3" value={formatPercentage(data.overallQuantityPercentage.item3)} color="#f57c00" /></Box>
-            </FramePaper>
+          <FramePaper>
+            <Box><IconWrapper><DonutLargeOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Consumo Qtd. Itens (%)</LabelText></Box>
+            <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={formatPercentage(data.overallQuantityPercentage.item1)} color={theme.palette.primary.main} /><ItemDetail title="Item 2" value={formatPercentage(data.overallQuantityPercentage.item2)} color={theme.palette.secondary.main} /><ItemDetail title="Item 3" value={formatPercentage(data.overallQuantityPercentage.item3)} color="#f57c00" /></Box>
+          </FramePaper>
         </Box>
 
-        {/* Card 3 */}
         <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
-            <FramePaper>
-                <Box><IconWrapper><AccountBalanceWalletOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Valor Restante por Item</LabelText></Box>
-                <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={formatCurrency(data.remainingValueByItem.item1)} color={theme.palette.primary.main}/><ItemDetail title="Item 2" value={formatCurrency(data.remainingValueByItem.item2)} color={theme.palette.secondary.main} /><ItemDetail title="Item 3" value={formatCurrency(data.remainingValueByItem.item3)} color="#f57c00"/></Box>
-            </FramePaper>
+          <FramePaper>
+            <Box><IconWrapper><AccountBalanceWalletOutlinedIcon fontSize="large" /></IconWrapper><LabelText>Valor Restante por Item</LabelText></Box>
+            <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={formatCurrency(data.remainingValueByItem.item1)} color={theme.palette.primary.main} /><ItemDetail title="Item 2" value={formatCurrency(data.remainingValueByItem.item2)} color={theme.palette.secondary.main} /><ItemDetail title="Item 3" value={formatCurrency(data.remainingValueByItem.item3)} color="#f57c00" /></Box>
+          </FramePaper>
         </Box>
 
-        {/* Card 4 */}
         <Box sx={{ width: { xs: '100%', sm: '50%', md: '25%' }, padding: theme.spacing(spacingValue / 2) }}>
-            <FramePaper>
-                <Box><IconWrapper><Inventory2OutlinedIcon fontSize="large" /></IconWrapper><LabelText>Qtd. Restante por Item</LabelText></Box>
-                <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={data.remainingQuantityByItem.item1.toLocaleString('pt-BR')} color={theme.palette.primary.main}/><ItemDetail title="Item 2" value={data.remainingQuantityByItem.item2.toLocaleString('pt-BR')} color={theme.palette.secondary.main}/><ItemDetail title="Item 3" value={data.remainingQuantityByItem.item3.toLocaleString('pt-BR')} color="#f57c00"/></Box>
-            </FramePaper>
+          <FramePaper>
+            <Box><IconWrapper><Inventory2OutlinedIcon fontSize="large" /></IconWrapper><LabelText>Qtd. Restante por Item</LabelText></Box>
+            <Box sx={{ width: '100%' }}><ItemDetail title="Item 1" value={data.remainingQuantityByItem.item1.toLocaleString('pt-BR')} color={theme.palette.primary.main} /><ItemDetail title="Item 2" value={data.remainingQuantityByItem.item2.toLocaleString('pt-BR')} color={theme.palette.secondary.main} /><ItemDetail title="Item 3" value={data.remainingQuantityByItem.item3.toLocaleString('pt-BR')} color="#f57c00" /></Box>
+          </FramePaper>
         </Box>
       </Box>
     </Box>

@@ -31,6 +31,7 @@ import DashboardFrames from './DashboardFrames'; // Import DashboardFrames
 import type { OrdemServicoIndicadores } from '../OrdemServico/types/OrdemServico';
 import { carregarOrdensDoStorage } from '../OrdemServico/Acompanhamento';
 import { processDataForCharts, type ProcessedData } from './dataProcessing';
+import AcompanhamentoComponent from './Acompanhamento';
 
 // Estrutura de OS, estenda conforme necessidade
 
@@ -335,6 +336,7 @@ export default function Indicadores() {
       <Grid container>
           <DashboardFrames data={processedChartData?.dashboardFrames || null} />
       </Grid>
+      <AcompanhamentoComponent />
       <hr/>
       {/* Top Row Charts - Monthly Execution and Total Value */}
       <Grid container spacing={3}>
